@@ -1,7 +1,15 @@
 :root {
   font-family: Inter, "Segoe UI", sans-serif;
-  color: #192c28;
-  background: #f7f8f5;
+  --bio-color-primary: var(--mantine-color-blue-6);
+  --bio-color-primary-hover: var(--mantine-color-blue-7);
+  --bio-color-page: var(--mantine-color-blue-0);
+  --bio-color-surface: var(--mantine-color-white);
+  --bio-color-border: var(--mantine-color-gray-3);
+  --bio-color-text: var(--mantine-color-gray-9);
+  --bio-color-muted: var(--mantine-color-gray-6);
+  --bio-color-hover: var(--mantine-color-blue-1);
+  color: var(--bio-color-text);
+  background: var(--bio-color-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }

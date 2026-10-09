@@ -1,7 +1,11 @@
 import { LoginScreenComponent } from './components/loginScreen.component'
 
-export const LoginScreenPage = () => {
+type LoginScreenPageProps = {
+  onLogin: (username: string) => void;
+};
+
+export const LoginScreenPage = ({ onLogin }: LoginScreenPageProps) => {
   return (
-    <LoginScreenComponent/>
-)
+    <LoginScreenComponent onLogin={onLogin} />
+  );
 }

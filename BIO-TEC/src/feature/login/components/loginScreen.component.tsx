@@ -1,9 +1,12 @@
 import { useState, type FormEvent } from 'react';
-import { Alert, Button, Checkbox, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Button, Checkbox, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
 import '../../../styles/login/login.css';
 
-export const LoginScreenComponent = () => {
-  const [submitted, setSubmitted] = useState(false);
+type LoginScreenComponentProps = {
+  onLogin: (username: string) => void;
+};
+
+export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => {
   const [username, setUsername] = useState(
     () => localStorage.getItem('bio-tec-remembered-user') ?? '',
   );
@@ -20,7 +23,7 @@ export const LoginScreenComponent = () => {
       localStorage.removeItem('bio-tec-remembered-user');
       localStorage.removeItem('bio-tec-remember-user');
     }
-    setSubmitted(true);
+    onLogin(username);
   };
 
   return (
@@ -31,14 +34,14 @@ export const LoginScreenComponent = () => {
             <span className="login-brand__mark" aria-hidden="true">B</span>
             <div>
               <Text fw={700} size="lg"  >BIO-TEC</Text>
-              <Text size="xs" c="dimmed">Gestión clínica</Text>
+              <Text size="xs" c="dimmed">Software de Gestión clínica</Text>
             </div>
           </div>
           <div className="login-heading">
             <Title id="login-title" order={2} className="login-title" ta="center">Iniciar Sesión</Title>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} >
             <Stack gap="md">
               <TextInput
                 label="Correo electrónico o usuario"
@@ -60,18 +63,13 @@ export const LoginScreenComponent = () => {
                 label="Recordar usuario"
                 checked={rememberUser}
                 onChange={(event) => setRememberUser(event.currentTarget.checked)}
-                color="teal"
+                color="blue"
               />
-              <Button type="submit" size="md" fullWidth mt={4}>
+              <Button type="submit" size="md" fullWidth mt="md">
                 Ingresar
               </Button>
-              {submitted && (
-                <Alert color="yellow" title="Acceso pendiente" variant="light" aria-live="polite">
-                  La validación de credenciales se incorporará más adelante.
-                </Alert>
-              )}
             </Stack>
-             <Button type="submit" size="md" fullWidth mt={2} >
+             <Button variant="outline" type="button" size="md" fullWidth mt="md">
                 Registrarse
               </Button>
           </form>

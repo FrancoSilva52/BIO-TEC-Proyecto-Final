@@ -1,0 +1,114 @@
+.home-sidebar__backdrop {
+	position: fixed;
+	inset: 76px 0 0;
+	z-index: 100;
+	border: 0;
+	background: rgb(18 40 62 / 32%);
+}
+
+.home-sidebar {
+	position: fixed;
+	top: 76px;
+	bottom: 0;
+	left: 0;
+	z-index: 110;
+	display: flex;
+	width: 264px;
+	flex-direction: column;
+	padding: 18px 12px 12px;
+	border-right: 1px solid var(--bio-color-border);
+	background: var(--bio-color-surface);
+	box-shadow: 8px 0 24px rgb(20 59 90 / 8%);
+	transform: translateX(-105%);
+	transition: transform 180ms ease;
+}
+
+.home-sidebar--open,
+.home-sidebar--pinned {
+	transform: translateX(0);
+}
+
+.home-sidebar__heading {
+	display: flex;
+	min-height: 40px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 8px 10px;
+}
+
+.home-sidebar__title {
+	color: var(--bio-color-muted);
+	font-size: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.home-sidebar__controls {
+	display: flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.home-sidebar__pin--active {
+	fill: var(--mantine-color-blue-1);
+}
+
+.home-sidebar__nav {
+	display: grid;
+	gap: 4px;
+}
+
+.home-sidebar__link {
+	display: flex;
+	min-height: 44px;
+	align-items: center;
+	gap: 12px;
+	padding: 0 12px;
+	border-radius: 6px;
+	color: var(--bio-color-text);
+	font-size: 14px;
+	text-decoration: none;
+	transition: background-color 120ms ease, color 120ms ease;
+}
+
+.home-sidebar__link:hover {
+	background: var(--bio-color-hover);
+}
+
+.home-sidebar__link--active {
+	background: var(--mantine-color-blue-1);
+	color: var(--mantine-color-blue-8);
+	font-weight: 650;
+}
+
+.home-sidebar__link:focus-visible {
+	outline: 2px solid var(--bio-color-primary);
+	outline-offset: 1px;
+}
+
+.home-sidebar__footer {
+	margin-top: auto;
+	padding: 14px 12px 4px;
+	border-top: 1px solid var(--bio-color-border);
+	color: var(--bio-color-muted);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0;
+}
+
+@media (max-width: 600px) {
+	.home-sidebar,
+	.home-sidebar__backdrop {
+		top: 68px;
+	}
+}
+
+@media (max-width: 760px) {
+	.home-sidebar__backdrop {
+		z-index: 100;
+	}
+
+	.home-sidebar {
+		z-index: 110;
+	}
+}
