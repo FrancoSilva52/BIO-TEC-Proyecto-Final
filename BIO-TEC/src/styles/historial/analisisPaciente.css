@@ -1,0 +1,161 @@
+.patient-analysis {
+  min-width: 0;
+}
+
+.patient-analysis__toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.patient-analysis__search {
+  display: grid;
+  width: min(100%, 520px);
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 10px;
+}
+
+.patient-analysis__search > button,
+.patient-analysis__new {
+  min-height: 36px;
+}
+
+.patient-analysis__heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.patient-analysis__heading h2 {
+  margin: 0 0 4px;
+  color: var(--bio-color-text);
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.patient-analysis__demo-warning {
+  margin-bottom: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.patient-analysis__table-wrap {
+  overflow: hidden;
+  border: 1px solid var(--bio-color-border);
+  border-radius: 8px;
+  background: var(--bio-color-surface);
+}
+
+.patient-analysis__table thead tr {
+  background: var(--mantine-color-blue-0);
+}
+
+.patient-analysis__table th {
+  color: var(--bio-color-muted);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.patient-analysis__table td {
+  color: var(--bio-color-text);
+  font-size: 13px;
+}
+
+.patient-analysis__template {
+  font-weight: 600;
+}
+
+.patient-analysis__actions-heading,
+.patient-analysis__actions-cell {
+  text-align: right;
+}
+
+.patient-analysis__empty {
+  display: grid;
+  min-height: 130px;
+  align-content: center;
+  justify-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.patient-analysis__modal-content {
+  border: 1px solid var(--bio-color-border);
+  border-radius: 8px;
+}
+
+.patient-analysis__printable {
+  display: grid;
+  gap: 14px;
+}
+
+.patient-analysis__print-brand {
+  margin: 0;
+  color: var(--bio-color-primary);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.patient-analysis__results-table th {
+  color: var(--bio-color-muted);
+  font-size: 12px;
+}
+
+.patient-analysis__results-table td {
+  font-size: 13px;
+}
+
+.patient-analysis__processing {
+  padding: 24px 0;
+}
+
+.patient-analysis__modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+@media (max-width: 720px) {
+  .patient-analysis__toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .patient-analysis__search {
+    width: 100%;
+  }
+
+  .patient-analysis__new {
+    align-self: flex-start;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  .patient-analysis__printable,
+  .patient-analysis__printable * {
+    visibility: visible !important;
+  }
+
+  .patient-analysis__printable {
+    position: fixed;
+    inset: 0;
+    padding: 24px;
+    background: #fff;
+    color: #000;
+  }
+
+  .mantine-Modal-header,
+  .mantine-Modal-overlay,
+  .patient-analysis__modal-actions {
+    display: none !important;
+  }
+}

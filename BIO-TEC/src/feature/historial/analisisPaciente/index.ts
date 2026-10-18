@@ -1,0 +1,1 @@
+export { AnalisisPacienteComponent } from './components/analisisPaciente.component';
