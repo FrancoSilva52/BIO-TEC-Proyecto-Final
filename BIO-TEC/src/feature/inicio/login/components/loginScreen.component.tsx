@@ -1,12 +1,16 @@
 import { useState, type FormEvent } from 'react';
-import { Button, Checkbox, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Alert, Button, Checkbox, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
 import '../../../styles/login/login.css';
+import { authenticateUser, type AuthenticatedUser } from '../services/auth.service';
 
 type LoginScreenComponentProps = {
-  onLogin: (username: string) => void;
+  onLogin: (user: AuthenticatedUser) => void;
 };
 
 export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => {
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [username, setUsername] = useState(
     () => localStorage.getItem('bio-tec-remembered-user') ?? '',
   );
@@ -14,8 +18,11 @@ export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => 
     () => localStorage.getItem('bio-tec-remember-user') === 'true',
   );
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsSubmitting(true);
+    setLoginError('');
+
     if (rememberUser) {
       localStorage.setItem('bio-tec-remembered-user', username);
       localStorage.setItem('bio-tec-remember-user', 'true');
@@ -23,7 +30,22 @@ export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => 
       localStorage.removeItem('bio-tec-remembered-user');
       localStorage.removeItem('bio-tec-remember-user');
     }
-    onLogin(username);
+
+    try {
+      const authenticatedUser = await authenticateUser(username, password);
+      if (!authenticatedUser) {
+        setLoginError('Usuario o contraseña incorrectos.');
+        return;
+      }
+
+      setPassword('');
+      onLogin(authenticatedUser);
+    } catch (error) {
+      console.error('No se pudo iniciar sesión:', error);
+      setLoginError('No se pudo abrir la base de datos local. Ejecutá la aplicación con Tauri.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -41,7 +63,7 @@ export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => 
             <Title id="login-title" order={2} className="login-title" ta="center">Iniciar Sesión</Title>
           </div>
 
-          <form onSubmit={handleSubmit} >
+          <form onSubmit={handleSubmit}>
             <Stack gap="md">
               <TextInput
                 label="Correo electrónico o usuario"
@@ -56,6 +78,8 @@ export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => 
                 label="Contraseña"
                 placeholder="Ingresá tu contraseña"
                 autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.currentTarget.value)}
                 required
                 size="md"
               />
@@ -65,7 +89,12 @@ export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => 
                 onChange={(event) => setRememberUser(event.currentTarget.checked)}
                 color="blue"
               />
-              <Button type="submit" size="md" fullWidth mt="md">
+              {loginError && (
+                <Alert color="red" variant="light" role="alert">
+                  {loginError}
+                </Alert>
+              )}
+              <Button type="submit" size="md" fullWidth mt="md" loading={isSubmitting}>
                 Ingresar
               </Button>
             </Stack>

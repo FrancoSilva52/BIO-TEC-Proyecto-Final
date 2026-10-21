@@ -1,20 +1,48 @@
-import { useMemo, useState, type FormEvent } from 'react';
-import { Button, Select, Table, Text, TextInput } from '@mantine/core';
+import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { Alert, Button, Select, Table, Text, TextInput } from '@mantine/core';
 import { Search, UserRoundSearch } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { PACIENTES_DEMO } from '../data/pacientes.mock';
+import { listPatients } from '../data/pacientes.repository';
+import type { Paciente } from '../type/paciente.interface';
 
 type SortOption = 'name' | 'newest';
 
-export const GrillaPacientesComponents = () => {
+type GrillaPacientesComponentsProps = {
+  doctorId: string;
+};
+
+export const GrillaPacientesComponents = ({ doctorId }: GrillaPacientesComponentsProps) => {
+  const [patients, setPatients] = useState<Paciente[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [query, setQuery] = useState('');
   const [submittedQuery, setSubmittedQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('name');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    let isCurrent = true;
+
+    listPatients(doctorId)
+      .then((loadedPatients) => {
+        if (isCurrent) setPatients(loadedPatients);
+      })
+      .catch((error: unknown) => {
+        console.error('No se pudieron cargar los pacientes:', error);
+        if (isCurrent) setLoadError('No se pudieron cargar los pacientes desde la base local.');
+      })
+      .finally(() => {
+        if (isCurrent) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [doctorId]);
+
   const visiblePatients = useMemo(() => {
     const normalizedQuery = submittedQuery.trim().toLocaleLowerCase('es');
-    const filteredPatients = PACIENTES_DEMO.filter((patient) => {
+    const filteredPatients = patients.filter((patient) => {
       const searchableText = [
         patient.nombre,
         patient.apellido,
@@ -41,7 +69,7 @@ export const GrillaPacientesComponents = () => {
         first.nombre.localeCompare(second.nombre, 'es', { sensitivity: 'base' })
       );
     });
-  }, [submittedQuery, sortBy]);
+  }, [patients, submittedQuery, sortBy]);
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -86,6 +114,8 @@ export const GrillaPacientesComponents = () => {
         </Button>
       </form>
 
+      {loadError && <Alert color="red" mb="md">{loadError}</Alert>}
+
       <div className="patients-table-wrap">
         <Table.ScrollContainer minWidth={820} type="native">
           <Table className="patients-table" highlightOnHover verticalSpacing="md">
@@ -124,9 +154,15 @@ export const GrillaPacientesComponents = () => {
                 <Table.Tr>
                   <Table.Td colSpan={5}>
                     <div className="patients-table__empty">
-                      <Text fw={600}>No encontramos pacientes</Text>
+                      <Text fw={600}>
+                        {isLoading ? 'Cargando pacientes…' : 'No encontramos pacientes'}
+                      </Text>
                       <Text size="sm" c="dimmed">
-                        Probá con otro nombre, DNI, localidad u obra social.
+                        {isLoading
+                          ? 'Consultando la base de datos local.'
+                          : submittedQuery
+                            ? 'Probá con otro nombre, DNI, localidad u obra social.'
+                            : 'Todavía no hay pacientes registrados para este médico.'}
                       </Text>
                     </div>
                   </Table.Td>
@@ -138,7 +174,7 @@ export const GrillaPacientesComponents = () => {
       </div>
 
       <p className="patients-page__demo-note">
-        Datos ficticios de demostración; todavía no se guardan en una base de datos.
+        Pacientes locales de demostración asociados a este médico.
       </p>
     </section>
   );

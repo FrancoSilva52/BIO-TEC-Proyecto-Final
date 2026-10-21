@@ -1,30 +1,53 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Alert, Badge, Button, Modal, Table, Text, TextInput } from '@mantine/core';
 import { Eye, Printer, Search } from 'lucide-react';
-import { ANALISIS_DEMO } from '../data/analisis.mock';
+import { listAnalysesByPatient } from '../data/analisis.repository';
 import type { AnalisisClinico } from '../types/analisis.interface';
 import '../../../../styles/historial/analisisPaciente.css';
+import { formateoDia } from '../../../../const/formateo.const';
 
 type AnalisisPacienteProps = {
   patientId: string;
+  doctorId: string;
   onCreateAnalysis: () => void;
 };
 
-const formatAnalysisDate = (date: string) =>
-  new Intl.DateTimeFormat('es-AR', { dateStyle: 'medium', timeZone: 'UTC' }).format(
-    new Date(`${date}T00:00:00Z`),
-  );
-
 export const AnalisisPacienteComponent = ({
   patientId,
+  doctorId,
   onCreateAnalysis,
 }: AnalisisPacienteProps) => {
+  const [analysesFromDatabase, setAnalysesFromDatabase] = useState<AnalisisClinico[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [query, setQuery] = useState('');
   const [submittedQuery, setSubmittedQuery] = useState('');
   const [selectedAnalysis, setSelectedAnalysis] = useState<AnalisisClinico | null>(null);
 
-  const analyses = ANALISIS_DEMO
-    .filter((analysis) => analysis.patientId === patientId)
+  useEffect(() => {
+    let isCurrent = true;
+    setAnalysesFromDatabase([]);
+    setLoadError('');
+    setIsLoading(true);
+
+    listAnalysesByPatient(patientId, doctorId)
+      .then((loadedAnalyses) => {
+        if (isCurrent) setAnalysesFromDatabase(loadedAnalyses);
+      })
+      .catch((error: unknown) => {
+        console.error('No se pudieron cargar los análisis:', error);
+        if (isCurrent) setLoadError('No se pudo cargar el historial desde la base local.');
+      })
+      .finally(() => {
+        if (isCurrent) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [doctorId, patientId]);
+
+  const analyses = analysesFromDatabase
     .filter((analysis) =>
       `${analysis.plantilla} ${analysis.fecha} ${analysis.estado}`
         .toLocaleLowerCase('es')
@@ -67,8 +90,9 @@ export const AnalisisPacienteComponent = ({
       </div>
 
       <Alert className="patient-analysis__demo-warning" color="blue" variant="light">
-        Historial de demostración. Los resultados no tienen validez clínica.
+        Base local de demostración. Los resultados no tienen validez clínica.
       </Alert>
+      {loadError && <Alert color="red" mb="md">{loadError}</Alert>}
 
       <div className="patient-analysis__table-wrap">
         <Table.ScrollContainer minWidth={650} type="native">
@@ -84,7 +108,7 @@ export const AnalisisPacienteComponent = ({
             <Table.Tbody>
               {analyses.map((analysis) => (
                 <Table.Tr key={analysis.id}>
-                  <Table.Td>{formatAnalysisDate(analysis.fecha)}</Table.Td>
+                  <Table.Td>{formateoDia(analysis.fecha)}</Table.Td>
                   <Table.Td className="patient-analysis__template">
                     {analysis.plantilla}
                     <Text component="span" size="xs" c="dimmed">
@@ -115,11 +139,15 @@ export const AnalisisPacienteComponent = ({
                 <Table.Tr>
                   <Table.Td colSpan={4}>
                     <div className="patient-analysis__empty">
-                      <Text fw={600}>No hay análisis para mostrar</Text>
+                      <Text fw={600}>
+                        {isLoading ? 'Cargando análisis…' : 'No hay análisis para mostrar'}
+                      </Text>
                       <Text size="sm" c="dimmed">
-                        {submittedQuery
-                          ? 'Probá con otra plantilla o fecha.'
-                          : 'Los análisis registrados para este paciente aparecerán acá.'}
+                        {isLoading
+                          ? 'Consultando la base de datos local.'
+                          : submittedQuery
+                            ? 'Probá con otra plantilla o fecha.'
+                            : 'Los análisis registrados para este paciente aparecerán acá.'}
                       </Text>
                     </div>
                   </Table.Td>
@@ -143,7 +171,7 @@ export const AnalisisPacienteComponent = ({
             <div className="patient-analysis__printable">
               <p className="patient-analysis__print-brand">BIO-TEC · DEMOSTRACIÓN</p>
               <Text size="sm" c="dimmed">
-                Fecha: {formatAnalysisDate(selectedAnalysis.fecha)} · Plantilla v
+                Fecha: {formateoDia(selectedAnalysis.fecha)} · Plantilla v
                 {selectedAnalysis.versionPlantilla}
               </Text>
               <Alert className="patient-analysis__demo-warning" color="blue" variant="light">

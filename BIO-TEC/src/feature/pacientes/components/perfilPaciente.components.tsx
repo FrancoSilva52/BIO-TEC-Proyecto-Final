@@ -1,9 +1,11 @@
 
+import { useEffect, useState } from 'react';
 import { Badge, Button, Paper, Text } from '@mantine/core';
 import { ArrowLeft } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { AnalisisPacienteComponent } from '../../historial/analisisPaciente';
-import { PACIENTES_DEMO } from '../data/pacientes.mock';
+import { AnalisisPacienteComponent } from '../../historial/analisis';
+import { getPatientById } from '../data/pacientes.repository';
+import type { Paciente } from '../type/paciente.interface';
 
 const calculateAge = (birthDate: string) => {
   const date = new Date(`${birthDate}T00:00:00`);
@@ -19,10 +21,46 @@ const calculateAge = (birthDate: string) => {
   return age >= 0 ? age : null;
 };
 
-export const PerfilPacienteComponents = () => {
+type PerfilPacienteComponentsProps = {
+  doctorId: string;
+};
+
+export const PerfilPacienteComponents = ({ doctorId }: PerfilPacienteComponentsProps) => {
   const { patientId } = useParams();
   const navigate = useNavigate();
-  const patient = PACIENTES_DEMO.find(({ id }) => id === patientId);
+  const [patient, setPatient] = useState<Paciente | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
+
+  useEffect(() => {
+    let isCurrent = true;
+    setPatient(null);
+    setLoadError('');
+    setIsLoading(true);
+
+    if (!patientId) {
+      setIsLoading(false);
+      return () => {
+        isCurrent = false;
+      };
+    }
+
+    getPatientById(patientId, doctorId)
+      .then((loadedPatient) => {
+        if (isCurrent) setPatient(loadedPatient);
+      })
+      .catch((error: unknown) => {
+        console.error('No se pudo cargar el paciente:', error);
+        if (isCurrent) setLoadError('No se pudo cargar el perfil desde la base local.');
+      })
+      .finally(() => {
+        if (isCurrent) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [doctorId, patientId]);
 
   return (
     <section className="patients-page patients-profile" aria-labelledby="patient-profile-title">
@@ -36,7 +74,15 @@ export const PerfilPacienteComponents = () => {
         Volver a pacientes
       </Button>
 
-      {patient ? (
+      {isLoading ? (
+        <Text c="dimmed">Cargando perfil del paciente…</Text>
+      ) : loadError ? (
+        <div className="patients-profile__not-found">
+          <p className="patients-page__eyebrow">BIO-TEC / Pacientes</p>
+          <h1 id="patient-profile-title">No se pudo cargar el perfil</h1>
+          <p className="patients-page__description">{loadError}</p>
+        </div>
+      ) : patient ? (
         <>
           <div className="patients-page__heading patients-profile__heading">
             <div>
@@ -96,6 +142,7 @@ export const PerfilPacienteComponents = () => {
 
             <AnalisisPacienteComponent
               patientId={patient.id}
+              doctorId={doctorId}
               onCreateAnalysis={() =>
                 navigate(`/formularios/paciente?patientId=${encodeURIComponent(patient.id)}`)
               }
