@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Alert, Button, Checkbox, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
-import '../../../styles/login/login.css';
+import { Link } from 'react-router-dom';
+import '../../../../styles/login/login.css';
 import { authenticateUser, type AuthenticatedUser } from '../services/auth.service';
 
 type LoginScreenComponentProps = {
@@ -98,7 +99,7 @@ export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => 
                 Ingresar
               </Button>
             </Stack>
-             <Button variant="outline" type="button" size="md" fullWidth mt="md">
+             <Button component={Link} to="/registro" variant="outline" size="md" fullWidth mt="md">
                 Registrarse
               </Button>
           </form>

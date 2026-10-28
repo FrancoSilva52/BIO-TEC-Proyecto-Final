@@ -8,12 +8,20 @@ fn greet(name: &str) -> String {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let migrations = vec![Migration {
-        version: 1,
-        description: "create_bio_tec_schema_and_demo_data",
-        sql: include_str!("../migrations/001_initial_schema.sql"),
-        kind: MigrationKind::Up,
-    }];
+    let migrations = vec![
+        Migration {
+            version: 1,
+            description: "create_bio_tec_schema_and_demo_data",
+            sql: include_str!("../migrations/001_initial_schema.sql").trim_end(),
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 2,
+            description: "add_medical_user_fields_v1_1",
+            sql: include_str!("../migrations/002_add_medical_user_fields.sql").trim_end(),
+            kind: MigrationKind::Up,
+        },
+    ];
 
     tauri::Builder::default()
         .plugin(

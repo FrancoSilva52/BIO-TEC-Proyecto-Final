@@ -5,6 +5,7 @@ import '../../../styles/home/navbar.css';
 
 type NavBarComponentProps = {
   username: string;
+  profilePhotoDataUrl: string;
   onLogout: () => void;
   onMenuToggle: () => void;
   isMenuOpen: boolean;
@@ -12,6 +13,7 @@ type NavBarComponentProps = {
 
 export const NavBarComponent = ({
   username,
+  profilePhotoDataUrl,
   onLogout,
   onMenuToggle,
   isMenuOpen,
@@ -45,7 +47,7 @@ export const NavBarComponent = ({
       <Menu position="bottom-end" shadow="sm" withinPortal>
         <Menu.Target>
           <UnstyledButton className="home-navbar__profile" aria-label="Abrir menú de usuario">
-            <Avatar color="blue" radius="xl" size={38}>
+            <Avatar src={profilePhotoDataUrl || null} color="blue" radius="xl" size={38}>
               {displayName.charAt(0).toUpperCase()}
             </Avatar>
             <span className="home-navbar__user-copy">

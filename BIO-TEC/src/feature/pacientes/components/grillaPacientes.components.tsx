@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Alert, Button, Select, Table, Text, TextInput } from '@mantine/core';
 import { Search, UserRoundSearch } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { BackButtonComponent } from '../../../components/navigation/backButton.component';
 import { listPatients } from '../data/pacientes.repository';
 import type { Paciente } from '../type/paciente.interface';
 
@@ -78,6 +79,8 @@ export const GrillaPacientesComponents = ({ doctorId }: GrillaPacientesComponent
 
   return (
     <section className="patients-page" aria-labelledby="patients-title">
+      <BackButtonComponent fallbackTo="/" />
+
       <div className="patients-page__heading">
         <div>
           <p className="patients-page__eyebrow">BIO-TEC / Gestión clínica</p>

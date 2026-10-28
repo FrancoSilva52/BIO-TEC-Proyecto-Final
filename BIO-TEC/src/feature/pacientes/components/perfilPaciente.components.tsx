@@ -1,8 +1,8 @@
 
 import { useEffect, useState } from 'react';
-import { Badge, Button, Paper, Text } from '@mantine/core';
-import { ArrowLeft } from 'lucide-react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Badge, Paper, Text } from '@mantine/core';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BackButtonComponent } from '../../../components/navigation/backButton.component';
 import { AnalisisPacienteComponent } from '../../historial/analisis';
 import { getPatientById } from '../data/pacientes.repository';
 import type { Paciente } from '../type/paciente.interface';
@@ -64,15 +64,7 @@ export const PerfilPacienteComponents = ({ doctorId }: PerfilPacienteComponentsP
 
   return (
     <section className="patients-page patients-profile" aria-labelledby="patient-profile-title">
-      <Button
-        component={Link}
-        to="/pacientes"
-        variant="subtle"
-        leftSection={<ArrowLeft size={16} aria-hidden="true" />}
-        className="patients-profile__back"
-      >
-        Volver a pacientes
-      </Button>
+      <BackButtonComponent fallbackTo="/pacientes" label="Volver a pacientes" />
 
       {isLoading ? (
         <Text c="dimmed">Cargando perfil del paciente…</Text>

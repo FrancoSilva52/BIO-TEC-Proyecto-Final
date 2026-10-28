@@ -6,10 +6,11 @@ import { MenuLateralComponent } from './componentes/menuLateral.components';
 
 type HomePageProps = {
   username: string;
+  profilePhotoDataUrl: string;
   onLogout: () => void;
 };
 
-export const HomePage = ({ username, onLogout }: HomePageProps) => {
+export const HomePage = ({ username, profilePhotoDataUrl, onLogout }: HomePageProps) => {
   const [isPinned, setIsPinned] = useState(
     () => localStorage.getItem('bio-tec-sidebar-pinned') === 'true',
   );
@@ -26,6 +27,7 @@ export const HomePage = ({ username, onLogout }: HomePageProps) => {
     <div className={`home-page${isPinned ? ' home-page--pinned' : ''}`}>
       <NavBarComponent
         username={username}
+        profilePhotoDataUrl={profilePhotoDataUrl}
         onLogout={onLogout}
         onMenuToggle={() => setIsOpen(!isOpen)}
         isMenuOpen={isOpen}

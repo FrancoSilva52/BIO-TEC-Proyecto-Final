@@ -4,12 +4,14 @@ export interface AuthenticatedUser {
   id: string;
   username: string;
   fullName: string;
+  profilePhotoDataUrl: string;
 }
 
 type UserCredentialRow = {
   id: string;
   username: string;
   full_name: string;
+  profile_photo_data_url: string;
   password_hash: string;
   password_salt: string;
   password_iterations: number;
@@ -43,6 +45,20 @@ const derivePasswordHash = async (password: string, salt: Uint8Array, iterations
   return Array.from(new Uint8Array(bits), (byte) => byte.toString(16).padStart(2, '0')).join('');
 };
 
+const bytesToHex = (bytes: Uint8Array) =>
+  Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+
+export const createPasswordCredentials = async (password: string) => {
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iterations = 310000;
+
+  return {
+    passwordHash: await derivePasswordHash(password, salt, iterations),
+    passwordSalt: bytesToHex(salt),
+    passwordIterations: iterations,
+  };
+};
+
 const hashesMatch = (first: string, second: string) => {
   if (first.length !== second.length) return false;
 
@@ -60,9 +76,10 @@ export const authenticateUser = async (
 ): Promise<AuthenticatedUser | null> => {
   const database = await getDatabase();
   const users = await database.select<UserCredentialRow[]>(
-    `SELECT id, username, full_name, password_hash, password_salt, password_iterations, is_active
+    `SELECT id, username, full_name, profile_photo_data_url,
+        password_hash, password_salt, password_iterations, is_active
      FROM users
-     WHERE username = $1 COLLATE NOCASE
+     WHERE username = $1 COLLATE NOCASE OR email = $1 COLLATE NOCASE
      LIMIT 1`,
     [username.trim()],
   );
@@ -78,5 +95,10 @@ export const authenticateUser = async (
 
   if (!hashesMatch(candidateHash, user.password_hash)) return null;
 
-  return { id: user.id, username: user.username, fullName: user.full_name };
+  return {
+    id: user.id,
+    username: user.username,
+    fullName: user.full_name,
+    profilePhotoDataUrl: user.profile_photo_data_url,
+  };
 };
