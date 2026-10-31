@@ -1,7 +1,9 @@
 
+import {
+  ParametrosFormularioComponents,
+  type ParametrosFormularioProps,
+} from '../parametrosFormulario.components';
 
-export const HemogramaBasicoComponents = () => {
-  return (
-    <div>hemogramaBasico.components</div>
-  )
-}
+export const HemogramaBasicoComponents = (propiedades: ParametrosFormularioProps) => (
+  <ParametrosFormularioComponents {...propiedades} />
+);

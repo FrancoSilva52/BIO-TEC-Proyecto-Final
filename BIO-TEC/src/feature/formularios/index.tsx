@@ -1,7 +1,9 @@
-import { DiccionarioFormulariosComponents } from './componentes/diccionarioFormularios.components'
+import { FormulariosAnalisisComponents } from './componentes/formularioAnalisis.components';
 
-export const FormulariosPage = () => {
-  return (
-    <DiccionarioFormulariosComponents/>
-  )
-}
+type FormulariosPageProps = {
+  doctorId: string;
+};
+
+export const FormulariosPage = ({ doctorId }: FormulariosPageProps) => (
+  <FormulariosAnalisisComponents doctorId={doctorId} />
+);

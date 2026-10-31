@@ -8,6 +8,7 @@ import { RegistroPage } from './feature/inicio/registro';
 import { PacientesPage, PerfilPacienteComponents } from './feature/pacientes';
 import { HistorialPacientesPage } from './feature/historial/pacientes';
 import { BackButtonComponent } from './components/navigation/backButton.component';
+import { FormulariosPage } from './feature/formularios';
 
 function WorkspaceSection({ title }: { title: string }) {
   return (
@@ -77,7 +78,10 @@ function AppRoutes() {
           path="historial"
           element={currentUser ? <HistorialPacientesPage doctorId={currentUser.id} /> : null}
         />
-        {/* <Route path="formularios/paciente" element={<NuevoAnalisisPlaceholderComponent />} /> */}
+        <Route
+          path="formularios/paciente"
+          element={currentUser ? <FormulariosPage doctorId={currentUser.id} /> : null}
+        />
         <Route path="formularios/extra" element={<WorkspaceSection title="Formularios extra" />} />
         <Route path="configuracion" element={<WorkspaceSection title="Configuración" />} />
       </Route>

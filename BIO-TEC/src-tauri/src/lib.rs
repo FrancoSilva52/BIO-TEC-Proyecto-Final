@@ -21,6 +21,12 @@ pub fn run() {
             sql: include_str!("../migrations/002_add_medical_user_fields.sql").trim_end(),
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 3,
+            description: "add_basic_analysis_templates",
+            sql: include_str!("../migrations/003_add_basic_analysis_templates.sql").trim_end(),
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()

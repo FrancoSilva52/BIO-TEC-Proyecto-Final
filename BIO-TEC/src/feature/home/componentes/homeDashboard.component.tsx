@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 const quickLinks = [
   { title: 'Pacientes', to: '/pacientes', icon: Users },
   { title: 'Historial de consultas', to: '/historial', icon: Clock3 },
-  { title: 'Formulario de paciente', to: '/formularios/paciente', icon: UserRound },
+  { title: 'Nuevo análisis clínico', to: '/formularios/paciente', icon: UserRound },
   { title: 'Formularios extra', to: '/formularios/extra', icon: ClipboardList },
   { title: 'Configuración', to: '/configuracion', icon: Settings },
 ];

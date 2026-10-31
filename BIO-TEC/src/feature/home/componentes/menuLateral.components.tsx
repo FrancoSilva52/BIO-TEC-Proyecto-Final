@@ -13,7 +13,7 @@ const navigationItems = [
   { label: 'Inicio', to: '/', icon: House, end: true },
   { label: 'Pacientes', to: '/pacientes', icon: Users },
   { label: 'Historial', to: '/historial', icon: Clock3 },
-  { label: 'Formularios de paciente', to: '/formularios/paciente', icon: UserRound },
+  { label: 'Nuevo análisis clínico', to: '/formularios/paciente', icon: UserRound },
   { label: 'Formularios extra', to: '/formularios/extra', icon: ClipboardList },
   { label: 'Configuración', to: '/configuracion', icon: Settings },
 ];
