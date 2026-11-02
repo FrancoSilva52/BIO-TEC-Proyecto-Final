@@ -41,6 +41,7 @@ export const FormularioRegistroComponents = () => {
   const [apellido, setApellido] = useState('');
   const [dni, setDni] = useState('');
   const [area, setArea] = useState('');
+  const [institucion, setInstitucion] = useState('');
   const [telefono, setTelefono] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -88,6 +89,7 @@ export const FormularioRegistroComponents = () => {
         apellido,
         dni,
         area,
+        institucion,
         telefono,
         email,
         profilePhotoDataUrl,
@@ -140,6 +142,7 @@ export const FormularioRegistroComponents = () => {
                 </div>
                 <TextInput label="DNI " value={dni} onChange={(event) => setDni(event.currentTarget.value)} required autoComplete="off" />
                 <TextInput label="Área" placeholder="Ej. Bioquímica" value={area} onChange={(event) => setArea(event.currentTarget.value)} />
+                <TextInput label="Institución (opcional)" placeholder="Ej. Hospital o laboratorio" value={institucion} onChange={(event) => setInstitucion(event.currentTarget.value)} />
                 <TextInput label="Número de teléfono " type="tel" value={telefono} onChange={(event) => setTelefono(event.currentTarget.value)} required autoComplete="tel" />
                 <TextInput label="Correo electrónico " type="email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} required autoComplete="email" />
 

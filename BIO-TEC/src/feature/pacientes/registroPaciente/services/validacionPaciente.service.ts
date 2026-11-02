@@ -46,6 +46,7 @@ export const validarDatosPaciente = (
   if (!fechaEsValida(valores.fechaNacimiento)) {
     return 'Ingresá una fecha de nacimiento válida.';
   }
+  if (!valores.sexo) return 'Seleccioná el sexo del paciente.';
   if (valores.fechaNacimiento < FECHA_MINIMA_NACIMIENTO || valores.fechaNacimiento > obtenerFechaActual(hoy)) {
     return 'La fecha debe estar entre el 1/1/1900 y el día de hoy.';
   }

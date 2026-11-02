@@ -13,6 +13,7 @@ export const plantillasAnalisis: PlantillaAnalisis[] = [
       { id: 'aspecto', nombre: 'Aspecto', seccion: 'Examen físico', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
       { id: 'densidad', nombre: 'Densidad', seccion: 'Examen físico', unidad: '', referencia: referenciaNoIndicada, tipo: 'numero' },
       { id: 'ph', nombre: 'pH', seccion: 'Examen físico', unidad: '', referencia: referenciaNoIndicada, tipo: 'numero' },
+      //examen químico
       { id: 'proteinas', nombre: 'Proteínas', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
       { id: 'glucosa', nombre: 'Glucosa', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
       { id: 'cetonas', nombre: 'Cetonas', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
@@ -60,23 +61,25 @@ export const plantillasAnalisis: PlantillaAnalisis[] = [
     version: '1.0',
     disponible: true,
     parametros: [
-      { id: 'hematies', nombre: 'Hematíes', seccion: 'Serie roja', unidad: '/mm³', referencia: 'M: 3.600.000–5.000.000; H: 4.500.000–5.500.000', tipo: 'numero' },
-      { id: 'hemoglobina', nombre: 'Hemoglobina', seccion: 'Serie roja', unidad: 'g/dl', referencia: '12–16', tipo: 'numero' },
-      { id: 'hematocrito', nombre: 'Hematocrito', seccion: 'Serie roja', unidad: '%', referencia: 'H: 42–52; M: 37–48', tipo: 'numero' },
-      { id: 'vcm', nombre: 'V.C.M.', seccion: 'Índices hematimétricos', unidad: 'fl', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'hcm', nombre: 'H.C.M.', seccion: 'Índices hematimétricos', unidad: 'pg', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'chcm', nombre: 'C.H.C.M.', seccion: 'Índices hematimétricos', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'leucocitos', nombre: 'Leucocitos', seccion: 'Serie blanca', unidad: '/mm³', referencia: '5.000–9.000', tipo: 'numero' },
-      { id: 'neutrofilos-cayados', nombre: 'Neutrófilos en cayados', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'neutrofilos', nombre: 'Neutrófilos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'eosinofilos', nombre: 'Eosinófilos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'basofilos', nombre: 'Basófilos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'linfocitos', nombre: 'Linfocitos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'monocitos', nombre: 'Monocitos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
+      { id: 'hematies', nombre: 'Hematíes', seccion: '', unidad: '/mm³', referencia: 'M: 3.600.000–5.000.000; H: 4.500.000–5.500.000', tipo: 'numero' },
+      { id: 'hemoglobina', nombre: 'Hemoglobina', seccion: '', unidad: 'g/dl', referencia: '12–16', tipo: 'numero' },
+      { id: 'hematocrito', nombre: 'Hematocrito', seccion: '', unidad: '%', referencia: 'H: 42–52; M: 37–48', tipo: 'numero' },
+      { id: 'leucocitos', nombre: 'Leucocitos', seccion: '', unidad: '/mm³', referencia: '5.000–9.000', tipo: 'numero' },
+      //seccion: Fórmula leucocitaria
+      { id: 'neutrofilos-cayados', nombre: 'Neutrófilos en cayados', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: '0% - 4%', tipo: 'numero' },
+      { id: 'neutrofilos', nombre: 'Neutrófilos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: '40% - 60%', tipo: 'numero' },
+      { id: 'eosinofilos', nombre: 'Eosinófilos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: '1% - 4%', tipo: 'numero' },
+      { id: 'basofilos', nombre: 'Basófilos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: '0.4% - 1%', tipo: 'numero' },
+      { id: 'linfocitos', nombre: 'Linfocitos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: '20% - 45%', tipo: 'numero' },
+      { id: 'monocitos', nombre: 'Monocitos', seccion: 'Fórmula leucocitaria', unidad: '%', referencia: '2% - 10%', tipo: 'numero' },
+      //seccion: Otros parámetros
       { id: 'eritrosedimentacion-primera-hora', nombre: 'Eritrosedimentación, primera hora', seccion: 'Otros parámetros', unidad: 'mm', referencia: referenciaNoIndicada, tipo: 'numero' },
       { id: 'eritrosedimentacion-segunda-hora', nombre: 'Eritrosedimentación, segunda hora', seccion: 'Otros parámetros', unidad: 'mm', referencia: referenciaNoIndicada, tipo: 'numero' },
       { id: 'proteina-c-reactiva', nombre: 'Proteína C reactiva (látex)', seccion: 'Otros parámetros', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
       { id: 'plaquetas', nombre: 'Plaquetas', seccion: 'Otros parámetros', unidad: '/mm³', referencia: '150.000–400.000', tipo: 'numero' },
+      { id: 'vcm', nombre: 'V.C.M.', seccion: 'Índices hematimétricos', unidad: 'fl', referencia: referenciaNoIndicada, tipo: 'numero' },
+      { id: 'hcm', nombre: 'H.C.M.', seccion: 'Índices hematimétricos', unidad: 'pg', referencia: referenciaNoIndicada, tipo: 'numero' },
+      { id: 'chcm', nombre: 'C.H.C.M.', seccion: 'Índices hematimétricos', unidad: '%', referencia: referenciaNoIndicada, tipo: 'numero' },
       { id: 'observaciones-hemograma', nombre: 'Observaciones', seccion: 'Otros parámetros', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
     ],
   },
@@ -85,6 +88,57 @@ export const plantillasAnalisis: PlantillaAnalisis[] = [
     nombre: 'Coagulograma básico',
     version: '1.0',
     disponible: false,
-    parametros: [],
+    parametros: [
+      {
+        id: 'tiempo-de-sangria',
+        nombre: 'Tiempo de Sangria',
+        seccion: '',
+        unidad: 'min',
+        referencia: '2-5 minutos',
+        tipo: 'numero'
+      },
+       {
+        id: 'tiempo-de-coagulacion',
+        nombre: 'Tiempo de Coagulación',
+        seccion: '',
+        unidad: 'min',
+        referencia: '5-15 minutos',
+        tipo: 'numero'
+      },
+       {
+        id: 'tiempo-de-quick',
+        nombre: 'Tiempo de Quick',
+        seccion: '',
+        unidad: '%',
+        referencia: '70-100%',
+        tipo: 'numero'
+      },
+       {
+        id: 'plaquetas-coagulograma',
+        nombre: 'Plaquetas',
+        seccion: '',
+        unidad: '/mm³',
+        referencia: '150.000–400.000',
+        tipo: 'numero'
+      },
+       {
+        id: 'hematocrito-coagulograma',
+        nombre: 'Hematocrito',
+        seccion: '',
+        unidad: '%',
+        referencia: '36-46%',
+        tipo: 'numero'
+      },
+       {
+        id: 'rin',
+        nombre: 'R.I.N.',
+        seccion: '',
+        unidad: '',
+        referencia: '1,0-1,23',
+        tipo: 'numero'
+      },
+      { id: 'observaciones-coagulograma', nombre: 'Observaciones', seccion: 'Otros parámetros', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
+
+    ],
   },
 ];

@@ -29,8 +29,8 @@ export const registrarMedico = async (input: RegistroMedicoInput) => {
     await database.execute(
       `INSERT INTO users (
         id, username, full_name, description, password_hash, password_salt,
-        password_iterations, email, dni, phone, area, profile_photo_data_url
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+        password_iterations, email, dni, phone, area, institution, profile_photo_data_url
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
       [
         crypto.randomUUID(),
         email,
@@ -43,6 +43,7 @@ export const registrarMedico = async (input: RegistroMedicoInput) => {
         dni,
         input.telefono.trim(),
         input.area.trim(),
+        input.institucion.trim(),
         input.profilePhotoDataUrl,
       ],
     );

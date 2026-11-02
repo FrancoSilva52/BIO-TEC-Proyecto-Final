@@ -80,6 +80,10 @@ function AppRoutes() {
           element={currentUser ? <PerfilPacienteComponents doctorId={currentUser.id} /> : null}
         />
         <Route
+          path="pacientes/:patientId/editar"
+          element={currentUser ? <RegistroPacientePage doctorId={currentUser.id} modo="editar" /> : null}
+        />
+        <Route
           path="historial"
           element={currentUser ? <HistorialPacientesPage doctorId={currentUser.id} /> : null}
         />

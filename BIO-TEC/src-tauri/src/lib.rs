@@ -27,6 +27,12 @@ pub fn run() {
             sql: include_str!("../migrations/003_add_basic_analysis_templates.sql").trim_end(),
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 4,
+            description: "add_patient_sex_and_medical_institution",
+            sql: include_str!("../migrations/004_add_patient_sex_and_medical_institution.sql").trim_end(),
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()

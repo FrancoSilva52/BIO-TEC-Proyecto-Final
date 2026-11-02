@@ -1,4 +1,4 @@
-import type { Paciente } from '../../pacientes/types/paciente.type';
+import type { Paciente } from '../../pacientes/perfilPaciente/types/paciente.type';
 import type { PlantillaAnalisis } from './plantillaAnalisis.type';
 
 export type DiccionarioFormulariosComponentsProps = {
