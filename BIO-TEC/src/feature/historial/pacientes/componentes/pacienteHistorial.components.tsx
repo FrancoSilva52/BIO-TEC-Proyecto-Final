@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
 import { Alert, Badge, Button, Modal, Select, Table, Text, TextInput } from '@mantine/core';
 import { Eye, Printer, Search, UserRound } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,11 @@ import { listAnalysisHistory } from '../services/historial.repository';
 import type { AnalisisHistorial } from '../types/analisisHistorial.type';
 import type { PacienteHistorialComponentsProps } from '../types/pacienteHistorialComponentsProps.type';
 import type { SortOption } from '../types/sortOption.type';
+import {
+  imprimirAnalisis as imprimirDocumentoAnalisis,
+  prepararSeccionesImpresion,
+} from '../../../formularios/services/imprimirAnalisis.service';
+import { HojaImpresionAnalisisComponents } from '../../../formularios/componentes/hojaImpresionAnalisis.components';
 
 const normalizeSearchText = (value: string) =>
   value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es');
@@ -23,6 +28,7 @@ export const PacienteHistorialComponents = ({
   const [submittedQuery, setSubmittedQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [selectedAnalysis, setSelectedAnalysis] = useState<AnalisisHistorial | null>(null);
+  const hojaImpresionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isCurrent = true;
@@ -203,54 +209,28 @@ export const PacienteHistorialComponents = ({
         onClose={() => setSelectedAnalysis(null)}
         title={selectedAnalysis?.plantilla ?? 'Resultado del análisis'}
         centered
-        size="lg"
-        classNames={{ content: 'analysis-history__modal-content' }}
+        size="xl"
+        classNames={{ content: 'analysis-history__modal-content', body: 'analysis-print-modal-body' }}
       >
         {selectedAnalysis && (
           <>
-            <div className="analysis-history__printable">
-              <p className="analysis-history__print-brand">BIO-TEC · DEMOSTRACIÓN</p>
-              <Text size="sm" c="dimmed">
-                Paciente: {selectedAnalysis.pacienteNombre} {selectedAnalysis.pacienteApellido}
-              </Text>
-              <Text size="sm" c="dimmed">
-                Fecha: {formateoDia(selectedAnalysis.fecha)} · Plantilla v
-                {selectedAnalysis.versionPlantilla}
-              </Text>
-              <Text size="sm" c="dimmed">
-                Doctor: {selectedAnalysis.doctor} · Localidad:{' '}
-                {selectedAnalysis.localidad || 'No informada'}
-                {selectedAnalysis.provincia ? `, ${selectedAnalysis.provincia}` : ''}
-              </Text>
+            <div ref={hojaImpresionRef} className="analysis-history__printable analysis-print-preview">
+              <HojaImpresionAnalisisComponents
+                analisis={{
+                  institucion: selectedAnalysis.institucion || 'Análisis Clínicos de Salud',
+                  paciente: `${selectedAnalysis.pacienteApellido}, ${selectedAnalysis.pacienteNombre}`,
+                  profesional: selectedAnalysis.doctor,
+                  fecha: formateoDia(selectedAnalysis.fecha),
+                  plantilla: selectedAnalysis.plantilla,
+                  secciones: prepararSeccionesImpresion(
+                    selectedAnalysis.plantilla,
+                    selectedAnalysis.resultados,
+                  ),
+                }}
+              />
               <Alert className="analysis-history__demo-warning" color="blue" variant="light">
                 Valores de muestra sin validez clínica. No utilizar para diagnóstico ni tratamiento.
               </Alert>
-              {selectedAnalysis.resultados.length > 0 ? (
-                <Table className="analysis-history__results-table">
-                  <Table.Thead>
-                    <Table.Tr>
-                      <Table.Th>Parámetro</Table.Th>
-                      <Table.Th>Resultado</Table.Th>
-                      <Table.Th>Unidad</Table.Th>
-                      <Table.Th>Referencia</Table.Th>
-                    </Table.Tr>
-                  </Table.Thead>
-                  <Table.Tbody>
-                    {selectedAnalysis.resultados.map((result, index) => (
-                      <Table.Tr key={`${result.parametro}-${index}`}>
-                        <Table.Td>{result.parametro}</Table.Td>
-                        <Table.Td>{result.resultado}</Table.Td>
-                        <Table.Td>{result.unidad}</Table.Td>
-                        <Table.Td>{result.referencia}</Table.Td>
-                      </Table.Tr>
-                    ))}
-                  </Table.Tbody>
-                </Table>
-              ) : (
-                <Text className="analysis-history__processing" c="dimmed">
-                  Este análisis todavía está en proceso y no tiene resultados disponibles.
-                </Text>
-              )}
             </div>
             <div className="analysis-history__modal-actions">
               {selectedAnalysis.patientDoctorId === doctorId && (
@@ -266,7 +246,9 @@ export const PacienteHistorialComponents = ({
               <Button
                 leftSection={<Printer size={16} aria-hidden="true" />}
                 disabled={selectedAnalysis.estado !== 'Disponible'}
-                onClick={() => window.print()}
+                onClick={() => imprimirDocumentoAnalisis(
+                  hojaImpresionRef.current?.querySelector<HTMLElement>('.analysis-print-sheet') ?? null,
+                )}
               >
                 Imprimir
               </Button>

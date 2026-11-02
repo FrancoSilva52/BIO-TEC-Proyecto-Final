@@ -8,7 +8,8 @@ export const listAnalysisHistory = async (): Promise<AnalisisHistorial[]> => {
   const rows = await database.select<AnalysisHistoryRow[]>(
     `SELECT a.id AS analysis_id, a.patient_id, p.doctor_id AS patient_doctor_id,
             p.nombre AS paciente_nombre, p.apellido AS paciente_apellido,
-            p.localidad, p.provincia, u.full_name AS doctor, a.fecha,
+            p.localidad, p.provincia, u.full_name AS doctor,
+            u.institution AS institucion, a.fecha,
             a.plantilla_nombre, a.plantilla_version, a.estado,
             r.parametro, r.resultado, r.unidad, r.rango_referencia
      FROM clinical_analyses a
@@ -32,6 +33,7 @@ export const listAnalysisHistory = async (): Promise<AnalisisHistorial[]> => {
         localidad: row.localidad,
         provincia: row.provincia,
         doctor: row.doctor,
+        institucion: row.institucion,
         fecha: row.fecha,
         plantilla: row.plantilla_nombre,
         versionPlantilla: row.plantilla_version,

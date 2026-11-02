@@ -9,6 +9,7 @@ export type AnalysisHistoryRow = {
   localidad: string;
   provincia: string;
   doctor: string;
+  institucion: string;
   fecha: string;
   plantilla_nombre: string;
   plantilla_version: string;

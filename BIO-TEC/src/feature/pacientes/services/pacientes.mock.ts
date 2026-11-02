@@ -1,1 +1,0 @@
-export { PACIENTES_DEMO } from '../perfilPaciente/services/pacientes.mock';

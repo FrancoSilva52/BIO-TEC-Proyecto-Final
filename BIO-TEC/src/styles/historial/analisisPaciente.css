@@ -136,6 +136,8 @@
 }
 
 @media print {
+  @page { size: A4 portrait; margin: 12mm; }
+
   body * {
     visibility: hidden !important;
   }
@@ -146,9 +148,11 @@
   }
 
   .patient-analysis__printable {
-    position: fixed;
-    inset: 0;
-    padding: 24px;
+    position: static;
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
     background: #fff;
     color: #000;
   }

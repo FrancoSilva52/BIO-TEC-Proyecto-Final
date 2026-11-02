@@ -1,6 +1,6 @@
 
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Button, Group, Modal, Select, Stack, Text, Title } from '@mantine/core';
 import { Printer } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -13,80 +13,21 @@ import {
   guardarAnalisisClinico,
   obtenerDatosProfesionalImpresion,
 } from '../services/analisisFormulario.repository';
+import {
+  imprimirAnalisis as imprimirDocumentoAnalisis,
+  prepararSeccionesImpresion,
+} from '../services/imprimirAnalisis.service';
 import { DiccionarioFormulariosComponents } from './diccionarioFormularios.components';
+import { HojaImpresionAnalisisComponents } from './hojaImpresionAnalisis.components';
 import type { AnalisisParaImprimir } from '../types/analisisParaImprimir.type';
 import '../../../styles/formularios/formularios.css';
-
-const renderizarHojaImpresion = (analisis: AnalisisParaImprimir) => (
-  <article className="analysis-print-sheet">
-    <header className="analysis-print-sheet__header">
-      <h1>{analisis.institucion || 'Análisis Clínicos de Salud'}</h1>
-      <div className="analysis-print-sheet__metadata">
-        <span><strong>Paciente:</strong> {analisis.paciente}</span>
-        <span><strong>Dr/a:</strong> {analisis.profesional}</span>
-        <span><strong>Fecha:</strong> {analisis.fecha}</span>
-      </div>
-      <h2>{analisis.plantilla}</h2>
-    </header>
-    {analisis.secciones.map((seccion) => {
-      const tieneReferencias = seccion.resultados.some((resultado) => {
-        const referencia = resultado.referencia.trim().toLocaleLowerCase('es');
-        return referencia !== '' && referencia !== 'no indicada en el informe';
-      });
-
-      return (
-        <section className="analysis-print-sheet__section" key={seccion.nombre}>
-          <h3>{seccion.nombre}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Parámetro</th>
-                <th>Resultado</th>
-                {tieneReferencias && <th>Valor referencia</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {seccion.resultados.map((resultado) => (
-                <tr key={resultado.parametro}>
-                  <td>{resultado.parametro}</td>
-                  <td>
-                    {resultado.resultado || '—'}
-                    {resultado.unidad ? ` ${resultado.unidad}` : ''}
-                  </td>
-                  {tieneReferencias && <td>{resultado.referencia || '—'}</td>}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-      );
-    })}
-  </article>
-);
-
-const ESTILOS_DOCUMENTO_IMPRESION = `
-  @page { size: A4 portrait; margin: 8mm; }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; width: 100%; color: #111; background: #fff; font-family: Arial, sans-serif; }
-  .analysis-print-sheet { width: 100%; padding: 0; font-size: 9px; line-height: 1.15; }
-  .analysis-print-sheet__header { margin-bottom: 10px; text-align: center; }
-  .analysis-print-sheet__header h1 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
-  .analysis-print-sheet__metadata { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; font-size: 9px; text-align: left; }
-  .analysis-print-sheet__header h2 { margin: 10px 0 0; font-size: 11px; font-weight: 600; text-transform: uppercase; }
-  .analysis-print-sheet__section { margin-top: 8px; break-inside: avoid; }
-  .analysis-print-sheet__section h3 { margin: 0 0 3px; font-size: 9px; font-weight: 600; text-align: center; text-transform: uppercase; }
-  .analysis-print-sheet__section table { width: 100%; border-collapse: collapse; font-size: 8px; }
-  .analysis-print-sheet__section th, .analysis-print-sheet__section td { padding: 2px 4px; border-bottom: 1px solid #d5d9de; text-align: left; vertical-align: top; }
-  .analysis-print-sheet__section th { font-weight: 600; }
-  .analysis-print-sheet__section tr { break-inside: avoid; }
-  .analysis-print-sheet__section thead { display: table-header-group; }
-`;
 
 export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisComponentsProps) => {
   const [parametrosUrl] = useSearchParams();
   const navegar = useNavigate();
   const pacienteIdInicial = parametrosUrl.get('patientId');
   const plantillaIdInicial = parametrosUrl.get('templateId');
+  const hojaImpresionRef = useRef<HTMLDivElement>(null);
   const [pacientes, actualizarPacientes] = useState<Paciente[]>([]);
   const [pacienteSeleccionado, actualizarPacienteSeleccionado] = useState<string | null>(null);
   const [plantillaSeleccionada, actualizarPlantillaSeleccionada] = useState<string | null>(null);
@@ -204,19 +145,7 @@ export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisC
         profesional: datosProfesional.nombre,
         fecha: new Date().toLocaleDateString('es-AR'),
         plantilla: plantilla.nombre,
-        secciones: [...new Set(plantilla.parametros.map((parametro) => parametro.seccion))].map(
-          (seccion) => ({
-            nombre: seccion,
-            resultados: plantilla.parametros
-              .filter((parametro) => parametro.seccion === seccion)
-              .map((parametro) => ({
-                parametro: parametro.nombre,
-                resultado: valores[parametro.id]?.trim() ?? '',
-                unidad: parametro.unidad,
-                referencia: parametro.referencia,
-              })),
-          }),
-        ),
+        secciones: prepararSeccionesImpresion(plantilla.nombre, resultadosGuardados),
       });
       actualizarFormularioIniciado(false);
     } catch (error) {
@@ -242,33 +171,6 @@ export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisC
     }
   };
 
-  const imprimirAnalisisGuardado = () => {
-    const hojaImpresion = document.querySelector('.analysis-print-preview .analysis-print-sheet');
-    if (!hojaImpresion) return;
-
-    const marcoImpresion = document.createElement('iframe');
-    marcoImpresion.title = 'Vista de impresión del análisis';
-    marcoImpresion.setAttribute('aria-hidden', 'true');
-    marcoImpresion.style.position = 'fixed';
-    marcoImpresion.style.width = '0';
-    marcoImpresion.style.height = '0';
-    marcoImpresion.style.border = '0';
-    marcoImpresion.style.visibility = 'hidden';
-    marcoImpresion.onload = () => {
-      const ventanaImpresion = marcoImpresion.contentWindow;
-      if (!ventanaImpresion) {
-        marcoImpresion.remove();
-        return;
-      }
-
-      ventanaImpresion.addEventListener('afterprint', () => marcoImpresion.remove(), { once: true });
-      ventanaImpresion.focus();
-      ventanaImpresion.print();
-      window.setTimeout(() => marcoImpresion.remove(), 60000);
-    };
-    marcoImpresion.srcdoc = `<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Análisis clínico</title><style>${ESTILOS_DOCUMENTO_IMPRESION}</style></head><body>${hojaImpresion.outerHTML}</body></html>`;
-    document.body.append(marcoImpresion);
-  };
 
   return (
     <section className="analysis-form-page" aria-labelledby="analysis-form-title">
@@ -372,19 +274,22 @@ export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisC
         onClose={cerrarModalConfirmacion}
         title={analisisGuardado ? 'Análisis guardado' : 'Confirmar análisis'}
         centered
-        size="lg"
+        size="xl"
+        classNames={{ body: 'analysis-print-modal-body' }}
       >
         {analisisGuardado ? (
           <>
             <Text size="sm" mb="md">El análisis se guardó correctamente.</Text>
-            <div className="analysis-print-preview">
-              {renderizarHojaImpresion(analisisGuardado)}
+            <div ref={hojaImpresionRef} className="analysis-print-preview">
+              <HojaImpresionAnalisisComponents analisis={analisisGuardado} />
             </div>
             <Group justify="flex-end" mt="lg" className="analysis-print-actions">
               <Button
                 type="button"
                 variant="default"
-                onClick={imprimirAnalisisGuardado}
+                onClick={() => imprimirDocumentoAnalisis(
+                  hojaImpresionRef.current?.querySelector<HTMLElement>('.analysis-print-sheet') ?? null,
+                )}
                 leftSection={<Printer size={16} aria-hidden="true" />}
               >
                 Imprimir formulario

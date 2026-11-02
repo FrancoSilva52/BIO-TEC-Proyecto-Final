@@ -149,6 +149,7 @@ export const PerfilPacienteComponents = ({ doctorId }: PerfilPacienteComponentsP
             <AnalisisPacienteComponent
               patientId={patient.id}
               doctorId={doctorId}
+              nombrePaciente={`${patient.apellido}, ${patient.nombre}`}
               onCreateAnalysis={() =>
                 navigate(`/formularios/paciente?patientId=${encodeURIComponent(patient.id)}`)
               }
