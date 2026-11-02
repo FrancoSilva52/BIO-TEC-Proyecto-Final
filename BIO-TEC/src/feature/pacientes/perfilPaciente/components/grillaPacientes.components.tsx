@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { Alert, Button, Group, Select, Table, Text, TextInput } from '@mantine/core';
 import { Plus, Search, UserRoundSearch } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { BackButtonComponent } from '../../../components/navigation/backButton.component';
-import { listPatients } from '../services/pacientes.repository';
-import type { Paciente } from '../types/paciente.type';
+import { BackButtonComponent } from '../../../../components/navigation/backButton.component';
+import { listPatients } from '../../services/pacientes.repository';
+import type { Paciente } from '../../types/paciente.type';
 import type { GrillaPacientesComponentsProps } from '../types/grillaPacientesComponentsProps.type';
 import type { SortOption } from '../types/sortOption.type';
 

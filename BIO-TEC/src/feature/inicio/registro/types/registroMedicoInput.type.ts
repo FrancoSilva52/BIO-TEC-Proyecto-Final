@@ -3,6 +3,7 @@ export type RegistroMedicoInput = {
   apellido: string;
   dni: string;
   area: string;
+  institucion: string;
   telefono: string;
   email: string;
   profilePhotoDataUrl: string;

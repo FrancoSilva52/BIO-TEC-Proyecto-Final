@@ -147,8 +147,16 @@
   background: var(--bio-color-surface);
 }
 
+.patient-profile__details-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
 .patient-profile__details h2 {
-  margin: 0 0 18px;
+  margin: 0;
   color: var(--bio-color-text);
   font-size: 17px;
   font-weight: 650;

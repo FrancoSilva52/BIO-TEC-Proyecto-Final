@@ -5,9 +5,13 @@ export const PACIENTE_NUEVO_INICIAL: ValoresFormularioPaciente = {
 	apellido: '',
 	dni: '',
 	fechaNacimiento: '',
+	 sexo: '',
 	telefono: '',
 	localidad: '',
 	provincia: '',
 	poseeObraSocial: false,
 	obraSocial: '',
+	 grupoSanguineo: '',
+	 puedeDonarSangre: false,
+	 observaciones: '',
 };

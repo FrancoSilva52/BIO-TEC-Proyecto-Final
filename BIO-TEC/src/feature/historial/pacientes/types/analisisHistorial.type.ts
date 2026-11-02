@@ -7,4 +7,5 @@ export interface AnalisisHistorial extends AnalisisClinico {
   localidad: string;
   provincia: string;
   doctor: string;
+  institucion: string;
 }

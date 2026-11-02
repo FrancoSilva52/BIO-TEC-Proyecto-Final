@@ -8,6 +8,7 @@ import { RegistroPage } from './feature/inicio/registro';
 import { PacientesPage, PerfilPacienteComponents } from './feature/pacientes';
 import { RegistroPacientePage } from './feature/pacientes/registroPaciente';
 import { HistorialPacientesPage } from './feature/historial/pacientes';
+import { ConfiguracionUsuarioPage } from './feature/configuracion/usuario';
 import { BackButtonComponent } from './components/navigation/backButton.component';
 import { FormulariosPage } from './feature/formularios';
 
@@ -80,6 +81,10 @@ function AppRoutes() {
           element={currentUser ? <PerfilPacienteComponents doctorId={currentUser.id} /> : null}
         />
         <Route
+          path="pacientes/:patientId/editar"
+          element={currentUser ? <RegistroPacientePage doctorId={currentUser.id} modo="editar" /> : null}
+        />
+        <Route
           path="historial"
           element={currentUser ? <HistorialPacientesPage doctorId={currentUser.id} /> : null}
         />
@@ -88,7 +93,15 @@ function AppRoutes() {
           element={currentUser ? <FormulariosPage doctorId={currentUser.id} /> : null}
         />
         <Route path="formularios/extra" element={<WorkspaceSection title="Formularios extra" />} />
-        <Route path="configuracion" element={<WorkspaceSection title="Configuración" />} />
+        <Route
+          path="configuracion"
+          element={currentUser ? (
+            <ConfiguracionUsuarioPage
+              usuario={currentUser}
+              alActualizarPerfil={setCurrentUser}
+            />
+          ) : null}
+        />
       </Route>
       <Route path="*" element={<Navigate to={currentUser ? '/' : '/login'} replace />} />
     </Routes>
