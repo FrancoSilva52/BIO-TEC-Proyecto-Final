@@ -1,6 +1,6 @@
 import type { PlantillaAnalisis } from '../types/plantillaAnalisis.type';
 
-const referenciaNoIndicada = 'No indicada en el informe';
+const referenciaNoIndicada = '';
 
 export const plantillasAnalisis: PlantillaAnalisis[] = [
   {
@@ -9,10 +9,10 @@ export const plantillasAnalisis: PlantillaAnalisis[] = [
     version: '1.0',
     disponible: true,
     parametros: [
-      { id: 'color', nombre: 'Color', seccion: 'Examen físico', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
-      { id: 'aspecto', nombre: 'Aspecto', seccion: 'Examen físico', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
-      { id: 'densidad', nombre: 'Densidad', seccion: 'Examen físico', unidad: '', referencia: referenciaNoIndicada, tipo: 'numero' },
-      { id: 'ph', nombre: 'pH', seccion: 'Examen físico', unidad: '', referencia: referenciaNoIndicada, tipo: 'numero' },
+      { id: 'color', nombre: 'Color', seccion: 'Examen físico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
+      { id: 'aspecto', nombre: 'Aspecto', seccion: 'Examen físico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
+      { id: 'densidad', nombre: 'Densidad', seccion: 'Examen físico', unidad: '', referencia: 'No contiene', tipo: 'numero' },
+      { id: 'ph', nombre: 'pH', seccion: 'Examen físico', unidad: '', referencia: 'No contiene', tipo: 'numero' },
       //examen químico
       { id: 'proteinas', nombre: 'Proteínas', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
       { id: 'glucosa', nombre: 'Glucosa', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
@@ -21,8 +21,8 @@ export const plantillasAnalisis: PlantillaAnalisis[] = [
       { id: 'urobilinogeno', nombre: 'Urobilinógeno', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
       { id: 'hemoglobina-orina', nombre: 'Hemoglobina', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
       { id: 'nitritos', nombre: 'Nitritos', seccion: 'Examen químico', unidad: '', referencia: 'No contiene', tipo: 'texto' },
-      { id: 'sedimento', nombre: 'Sedimento / células epiteliales', seccion: 'Sedimento', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
-      { id: 'observaciones-orina', nombre: 'Observaciones', seccion: 'Sedimento', unidad: '', referencia: referenciaNoIndicada, tipo: 'texto' },
+      { id: 'sedimento', nombre: 'Sedimento / células epiteliales', seccion: 'Sedimento', unidad: '', referencia: 'No contiene', tipo: 'texto' },
+      { id: 'observaciones-orina', nombre: 'Observaciones', seccion: 'Sedimento', unidad: '', referencia: 'No contiene', tipo: 'texto' },
     ],
   },
   {

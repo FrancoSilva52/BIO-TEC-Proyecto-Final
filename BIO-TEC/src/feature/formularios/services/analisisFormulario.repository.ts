@@ -1,5 +1,21 @@
 import { getDatabase } from '../../../lib/database';
 import type { GuardarAnalisisClinicoInput } from '../types/guardarAnalisisClinicoInput.type';
+import type { DatosProfesionalImpresion } from '../types/datosProfesionalImpresion.type';
+
+export const obtenerDatosProfesionalImpresion = async (
+  profesionalId: string,
+): Promise<DatosProfesionalImpresion> => {
+  const baseDatos = await getDatabase();
+  const usuarios = await baseDatos.select<DatosProfesionalImpresion[]>(
+    'SELECT institution AS institucion, full_name AS nombre FROM users WHERE id = $1 LIMIT 1',
+    [profesionalId],
+  );
+
+  return {
+    institucion: usuarios[0]?.institucion.trim() || 'Análisis Clínicos de Salud',
+    nombre: usuarios[0]?.nombre.trim() || 'No informado',
+  };
+};
 
 export const guardarAnalisisClinico = async ({
   pacienteId,

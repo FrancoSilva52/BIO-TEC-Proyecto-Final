@@ -80,6 +80,73 @@
   border-top: 1px solid var(--bio-color-border);
 }
 
+.analysis-print-sheet {
+  width: 100%;
+  padding: 16px;
+  color: #111;
+  background: #fff;
+  border: 1px solid #d5d9de;
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.analysis-print-sheet__header {
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.analysis-print-sheet__header h1 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.analysis-print-sheet__metadata {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  font-size: 9px;
+  text-align: left;
+}
+
+.analysis-print-sheet__header h2 {
+  margin: 12px 0 0;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.analysis-print-sheet__section {
+  margin-top: 10px;
+  break-inside: avoid;
+}
+
+.analysis-print-sheet__section h3 {
+  margin: 0 0 4px;
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.analysis-print-sheet__section table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
+}
+
+.analysis-print-sheet__section th,
+.analysis-print-sheet__section td {
+  padding: 3px 5px;
+  border-bottom: 1px solid #d5d9de;
+  text-align: left;
+  vertical-align: top;
+}
+
+.analysis-print-sheet__section th {
+  font-weight: 600;
+}
+
 @media (max-width: 700px) {
   .analysis-form-page__selectors {
     grid-template-columns: 1fr;
