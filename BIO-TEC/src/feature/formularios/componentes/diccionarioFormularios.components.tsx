@@ -1,17 +1,8 @@
 
 import { Paper, Text, Title } from '@mantine/core';
-import type { Paciente } from '../../pacientes/type/paciente.interface';
-import type { PlantillaAnalisis } from '../data/plantillasAnalisis.data';
+import type { DiccionarioFormulariosComponentsProps } from '../types/diccionarioFormulariosComponentsProps.type';
 import { HemogramaBasicoComponents } from './plantillas/hemogramaBasico.components';
 import { ParametrosFormularioComponents } from './parametrosFormulario.components';
-
-type DiccionarioFormulariosComponentsProps = {
-  plantilla: PlantillaAnalisis;
-  paciente: Paciente;
-  valores: Record<string, string>;
-  alCambiarValor: (parametroId: string, valor: string) => void;
-  alGuardar: () => void;
-};
 
 export const DiccionarioFormulariosComponents = ({
   plantilla,

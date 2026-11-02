@@ -1,4 +1,4 @@
-import type { AnalisisClinico } from '../types/analisis.interface';
+import type { AnalisisClinico } from '../types/analisisClinico.type';
 
 export const ANALISIS_DEMO: AnalisisClinico[] = [
   {

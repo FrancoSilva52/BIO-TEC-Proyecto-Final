@@ -1,5 +1,5 @@
-export interface Paciente {
-  id: string;
+export type DatosNuevoPaciente = {
+  doctorId: string;
   nombre: string;
   apellido: string;
   dni: string;
@@ -8,8 +8,4 @@ export interface Paciente {
   localidad: string;
   provincia: string;
   obraSocial: string;
-  grupoSanguineo: string;
-  puedeDonarSangre: boolean;
-  observaciones: string;
-  createdAt: string;
 };

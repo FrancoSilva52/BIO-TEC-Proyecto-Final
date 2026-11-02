@@ -1,25 +1,14 @@
 import { getDatabase } from '../../../../lib/database';
-import type { AnalisisClinico, ResultadoAnalisis } from '../types/analisis.interface';
-
-type AnalysisResultRow = {
-  analysis_id: string;
-  patient_id: string;
-  fecha: string;
-  plantilla_nombre: string;
-  plantilla_version: string;
-  estado: AnalisisClinico['estado'];
-  parametro: string | null;
-  resultado: string | null;
-  unidad: string | null;
-  rango_referencia: string | null;
-};
+import type { AnalisisClinico } from '../types/analisisClinico.type';
+import { AnalisisResultadoFila } from '../types/analysisResultRow.type';
+import { ResultadoAnalisis } from '../types/resultadoAnalisis.type';
 
 export const listAnalysesByPatient = async (
   patientId: string,
   doctorId: string,
 ): Promise<AnalisisClinico[]> => {
   const database = await getDatabase();
-  const rows = await database.select<AnalysisResultRow[]>(
+  const rows = await database.select<AnalisisResultadoFila[]>(
     `SELECT a.id AS analysis_id, a.patient_id, a.fecha, a.plantilla_nombre,
             a.plantilla_version, a.estado, r.parametro, r.resultado, r.unidad,
             r.rango_referencia

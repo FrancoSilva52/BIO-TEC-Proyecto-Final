@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { HashRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
-import type { AuthenticatedUser } from './feature/inicio/login/services/auth.service';
+import type { AuthenticatedUser } from './feature/inicio/login/types/authenticatedUser.type';
 import { HomePage } from './feature/home';
 import { HomeDashboardComponent } from './feature/home/componentes/homeDashboard.component';
 import { LoginScreenPage } from './feature/inicio/login';
 import { RegistroPage } from './feature/inicio/registro';
 import { PacientesPage, PerfilPacienteComponents } from './feature/pacientes';
+import { RegistroPacientePage } from './feature/pacientes/registroPaciente';
 import { HistorialPacientesPage } from './feature/historial/pacientes';
 import { BackButtonComponent } from './components/navigation/backButton.component';
 import { FormulariosPage } from './feature/formularios';
@@ -69,6 +70,10 @@ function AppRoutes() {
         <Route
           path="pacientes"
           element={currentUser ? <PacientesPage doctorId={currentUser.id} /> : null}
+        />
+        <Route
+          path="pacientes/nuevo"
+          element={currentUser ? <RegistroPacientePage doctorId={currentUser.id} /> : null}
         />
         <Route
           path="pacientes/:patientId"

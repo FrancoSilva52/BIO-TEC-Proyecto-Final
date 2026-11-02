@@ -1,15 +1,8 @@
 import { ActionIcon, Avatar, Menu, Text, UnstyledButton } from '@mantine/core';
 import { Menu as MenuIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import type { NavBarComponentProps } from '../types/navBarComponentProps.type';
 import '../../../styles/home/navbar.css';
-
-type NavBarComponentProps = {
-  username: string;
-  profilePhotoDataUrl: string;
-  onLogout: () => void;
-  onMenuToggle: () => void;
-  isMenuOpen: boolean;
-};
 
 export const NavBarComponent = ({
   username,

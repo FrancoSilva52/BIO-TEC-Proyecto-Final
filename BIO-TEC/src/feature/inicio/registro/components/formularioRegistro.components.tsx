@@ -135,13 +135,13 @@ export const FormularioRegistroComponents = () => {
             <form onSubmit={handleSubmit}>
               <Stack gap="sm">
                 <div className="registration-name-fields">
-                  <TextInput label="Nombre *" value={nombre} onChange={(event) => setNombre(event.currentTarget.value)} required autoComplete="given-name" />
-                  <TextInput label="Apellido *" value={apellido} onChange={(event) => setApellido(event.currentTarget.value)} required autoComplete="family-name" />
+                  <TextInput label="Nombre " value={nombre} onChange={(event) => setNombre(event.currentTarget.value)} required autoComplete="given-name" />
+                  <TextInput label="Apellido " value={apellido} onChange={(event) => setApellido(event.currentTarget.value)} required autoComplete="family-name" />
                 </div>
-                <TextInput label="DNI *" value={dni} onChange={(event) => setDni(event.currentTarget.value)} required autoComplete="off" />
+                <TextInput label="DNI " value={dni} onChange={(event) => setDni(event.currentTarget.value)} required autoComplete="off" />
                 <TextInput label="Área" placeholder="Ej. Bioquímica" value={area} onChange={(event) => setArea(event.currentTarget.value)} />
-                <TextInput label="Número de teléfono *" type="tel" value={telefono} onChange={(event) => setTelefono(event.currentTarget.value)} required autoComplete="tel" />
-                <TextInput label="Correo electrónico *" type="email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} required autoComplete="email" />
+                <TextInput label="Número de teléfono " type="tel" value={telefono} onChange={(event) => setTelefono(event.currentTarget.value)} required autoComplete="tel" />
+                <TextInput label="Correo electrónico " type="email" value={email} onChange={(event) => setEmail(event.currentTarget.value)} required autoComplete="email" />
 
                 <div className="registration-photo-field">
                   <FileInput
@@ -161,7 +161,7 @@ export const FormularioRegistroComponents = () => {
                 </div>
 
                 <PasswordInput
-                  label="Contraseña *"
+                  label="Contraseña "
                   value={password}
                   onChange={(event) => setPassword(event.currentTarget.value)}
                   required
@@ -169,7 +169,7 @@ export const FormularioRegistroComponents = () => {
                   description="Mínimo 8 caracteres, una mayúscula y un número."
                 />
                 <PasswordInput
-                  label="Confirmar contraseña *"
+                  label="Confirmar contraseña "
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.currentTarget.value)}
                   required

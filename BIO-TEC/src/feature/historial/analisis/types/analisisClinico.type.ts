@@ -1,11 +1,5 @@
-export type EstadoAnalisis = 'Disponible' | 'En proceso';
-
-export interface ResultadoAnalisis {
-  parametro: string;
-  resultado: string;
-  unidad: string;
-  referencia: string;
-}
+import type { EstadoAnalisis } from './estadoAnalisis.type';
+import type { ResultadoAnalisis } from './resultadoAnalisis.type';
 
 export interface AnalisisClinico {
   id: string;

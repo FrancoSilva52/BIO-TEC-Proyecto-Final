@@ -1,16 +1,11 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Modal, Table, Text, TextInput } from '@mantine/core';
 import { Eye, Printer, Search } from 'lucide-react';
-import { listAnalysesByPatient } from '../data/analisis.repository';
-import type { AnalisisClinico } from '../types/analisis.interface';
+import { listAnalysesByPatient } from '../services/analisis.repository';
+import type { AnalisisClinico } from '../types/analisisClinico.type';
 import '../../../../styles/historial/analisisPaciente.css';
 import { formateoDia } from '../../../../const/formateo.const';
-
-type AnalisisPacienteProps = {
-  patientId: string;
-  doctorId: string;
-  onCreateAnalysis: () => void;
-};
+import { AnalisisPacienteProps } from '../types/analisisPacienteProps.type';
 
 export const AnalisisPacienteComponent = ({
   patientId,
@@ -89,9 +84,6 @@ export const AnalisisPacienteComponent = ({
         </div>
       </div>
 
-      <Alert className="patient-analysis__demo-warning" color="blue" variant="light">
-        Base local de demostración. Los resultados no tienen validez clínica.
-      </Alert>
       {loadError && <Alert color="red" mb="md">{loadError}</Alert>}
 
       <div className="patient-analysis__table-wrap">

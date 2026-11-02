@@ -5,14 +5,10 @@ import { Link } from 'react-router-dom';
 import { formateoDia } from '../../../../const/formateo.const';
 import { BackButtonComponent } from '../../../../components/navigation/backButton.component';
 import '../../../../styles/historial/pacienteHistorial.css';
-import { listAnalysisHistory } from '../data/historial.repository';
-import type { AnalisisHistorial } from '../types/analisisHistorial.interface';
-
-type SortOption = 'newest' | 'oldest';
-
-type PacienteHistorialComponentsProps = {
-  doctorId: string;
-};
+import { listAnalysisHistory } from '../services/historial.repository';
+import type { AnalisisHistorial } from '../types/analisisHistorial.type';
+import type { PacienteHistorialComponentsProps } from '../types/pacienteHistorialComponentsProps.type';
+import type { SortOption } from '../types/sortOption.type';
 
 const normalizeSearchText = (value: string) =>
   value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('es');
@@ -125,9 +121,6 @@ export const PacienteHistorialComponents = ({
         </Button>
       </form>
 
-      <Alert className="analysis-history__demo-warning" color="blue" variant="light">
-        Base local de demostración. Los resultados no tienen validez clínica.
-      </Alert>
       {loadError && <Alert color="red" mb="md">{loadError}</Alert>}
 
       <div className="analysis-history__table-wrap">

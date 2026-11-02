@@ -1,20 +1,5 @@
 import { getDatabase } from '../../../lib/database';
-
-type ResultadoAnalisisParaGuardar = {
-  parametro: string;
-  resultado: string;
-  unidad: string;
-  referencia: string;
-};
-
-type GuardarAnalisisClinicoInput = {
-  pacienteId: string;
-  profesionalId: string;
-  plantillaId: string;
-  nombrePlantilla: string;
-  versionPlantilla: string;
-  resultados: ResultadoAnalisisParaGuardar[];
-};
+import type { GuardarAnalisisClinicoInput } from '../types/guardarAnalisisClinicoInput.type';
 
 export const guardarAnalisisClinico = async ({
   pacienteId,

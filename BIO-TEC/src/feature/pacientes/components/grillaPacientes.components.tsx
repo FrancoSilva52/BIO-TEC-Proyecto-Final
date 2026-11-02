@@ -1,16 +1,12 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { Alert, Button, Select, Table, Text, TextInput } from '@mantine/core';
-import { Search, UserRoundSearch } from 'lucide-react';
+import { Alert, Button, Group, Select, Table, Text, TextInput } from '@mantine/core';
+import { Plus, Search, UserRoundSearch } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { BackButtonComponent } from '../../../components/navigation/backButton.component';
-import { listPatients } from '../data/pacientes.repository';
-import type { Paciente } from '../type/paciente.interface';
-
-type SortOption = 'name' | 'newest';
-
-type GrillaPacientesComponentsProps = {
-  doctorId: string;
-};
+import { listPatients } from '../services/pacientes.repository';
+import type { Paciente } from '../types/paciente.type';
+import type { GrillaPacientesComponentsProps } from '../types/grillaPacientesComponentsProps.type';
+import type { SortOption } from '../types/sortOption.type';
 
 export const GrillaPacientesComponents = ({ doctorId }: GrillaPacientesComponentsProps) => {
   const [patients, setPatients] = useState<Paciente[]>([]);
@@ -86,9 +82,18 @@ export const GrillaPacientesComponents = ({ doctorId }: GrillaPacientesComponent
           <p className="patients-page__eyebrow">BIO-TEC / Gestión clínica</p>
           <h1 id="patients-title">Pacientes</h1>
         </div>
-        <Text className="patients-page__count" size="sm">
-          {visiblePatients.length} {visiblePatients.length === 1 ? 'paciente' : 'pacientes'}
-        </Text>
+        <Group gap="md">
+          <Text className="patients-page__count" size="sm">
+            {visiblePatients.length} {visiblePatients.length === 1 ? 'paciente' : 'pacientes'}
+          </Text>
+          <Button
+            type="button"
+            leftSection={<Plus size={16} aria-hidden="true" />}
+            onClick={() => navigate('/pacientes/nuevo', { state: { origen: 'pacientes' } })}
+          >
+            Nuevo paciente
+          </Button>
+        </Group>
       </div>
 
       <form className="patients-toolbar" onSubmit={handleSearch} role="search">
@@ -165,7 +170,7 @@ export const GrillaPacientesComponents = ({ doctorId }: GrillaPacientesComponent
                           ? 'Consultando la base de datos local.'
                           : submittedQuery
                             ? 'Probá con otro nombre, DNI, localidad u obra social.'
-                            : 'Todavía no hay pacientes registrados para este médico.'}
+                            : 'Todavía no hay pacientes registrados.'}
                       </Text>
                     </div>
                   </Table.Td>
@@ -175,10 +180,6 @@ export const GrillaPacientesComponents = ({ doctorId }: GrillaPacientesComponent
           </Table>
         </Table.ScrollContainer>
       </div>
-
-      <p className="patients-page__demo-note">
-        Pacientes locales de demostración asociados a este médico.
-      </p>
     </section>
   );
 };

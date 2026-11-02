@@ -1,9 +1,5 @@
 import { LoginScreenComponent } from './components/loginScreen.component'
-import type { AuthenticatedUser } from './services/auth.service';
-
-type LoginScreenPageProps = {
-  onLogin: (user: AuthenticatedUser) => void;
-};
+import type { LoginScreenPageProps } from './types/loginScreenPageProps.type';
 
 export const LoginScreenPage = ({ onLogin }: LoginScreenPageProps) => {
   return (

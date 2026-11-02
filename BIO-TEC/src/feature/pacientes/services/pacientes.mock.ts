@@ -1,4 +1,4 @@
-import { Paciente } from "../type/paciente.interface";
+import type { Paciente } from '../types/paciente.type';
 
 export const PACIENTES_DEMO: Paciente[] = [
   {

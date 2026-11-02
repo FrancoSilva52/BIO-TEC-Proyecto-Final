@@ -1,16 +1,6 @@
 import { getDatabase } from '../../../../lib/database';
 import { createPasswordCredentials } from '../../login/services/auth.service';
-
-export type RegistroMedicoInput = {
-  nombre: string;
-  apellido: string;
-  dni: string;
-  area: string;
-  telefono: string;
-  email: string;
-  profilePhotoDataUrl: string;
-  password: string;
-};
+import type { RegistroMedicoInput } from '../types/registroMedicoInput.type';
 
 export class DatosMedicoDuplicadosError extends Error {
   constructor() {

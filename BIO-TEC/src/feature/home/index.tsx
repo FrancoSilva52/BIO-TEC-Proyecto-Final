@@ -3,12 +3,7 @@ import { Outlet } from 'react-router-dom';
 import '../../styles/home/menulateral.css';
 import { NavBarComponent } from './componentes/navbarHome.components';
 import { MenuLateralComponent } from './componentes/menuLateral.components';
-
-type HomePageProps = {
-  username: string;
-  profilePhotoDataUrl: string;
-  onLogout: () => void;
-};
+import type { HomePageProps } from './types/homePageProps.type';
 
 export const HomePage = ({ username, profilePhotoDataUrl, onLogout }: HomePageProps) => {
   const [isPinned, setIsPinned] = useState(

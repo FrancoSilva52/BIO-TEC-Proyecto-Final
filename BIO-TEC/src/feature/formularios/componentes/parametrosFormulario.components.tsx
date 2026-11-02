@@ -1,12 +1,5 @@
 import { Button, Text, TextInput } from '@mantine/core';
-import type { ParametroAnalisis } from '../data/plantillasAnalisis.data';
-
-export type ParametrosFormularioProps = {
-  parametros: ParametroAnalisis[];
-  valores: Record<string, string>;
-  alCambiarValor: (parametroId: string, valor: string) => void;
-  alGuardar: () => void;
-};
+import type { ParametrosFormularioProps } from '../types/parametrosFormularioProps.type';
 
 export const ParametrosFormularioComponents = ({
   parametros,

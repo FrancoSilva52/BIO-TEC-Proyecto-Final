@@ -1,25 +1,7 @@
 import { getDatabase } from '../../../../lib/database';
-import type { ResultadoAnalisis } from '../../analisis/types/analisis.interface';
-import type { AnalisisHistorial } from '../types/analisisHistorial.interface';
-
-type AnalysisHistoryRow = {
-  analysis_id: string;
-  patient_id: string;
-  patient_doctor_id: string;
-  paciente_nombre: string;
-  paciente_apellido: string;
-  localidad: string;
-  provincia: string;
-  doctor: string;
-  fecha: string;
-  plantilla_nombre: string;
-  plantilla_version: string;
-  estado: AnalisisHistorial['estado'];
-  parametro: string | null;
-  resultado: string | null;
-  unidad: string | null;
-  rango_referencia: string | null;
-};
+import { ResultadoAnalisis } from '../../analisis/types/resultadoAnalisis.type';
+import type { AnalisisHistorial } from '../types/analisisHistorial.type';
+import type { AnalysisHistoryRow } from '../types/analysisHistoryRow.type';
 
 export const listAnalysisHistory = async (): Promise<AnalisisHistorial[]> => {
   const database = await getDatabase();

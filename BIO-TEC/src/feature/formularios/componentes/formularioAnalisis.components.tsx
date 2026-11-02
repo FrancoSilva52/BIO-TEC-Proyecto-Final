@@ -4,21 +4,19 @@ import { useEffect, useState } from 'react';
 import { Alert, Button, Group, Modal, Select, Stack, Text, Title } from '@mantine/core';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { BackButtonComponent } from '../../../components/navigation/backButton.component';
-import { listPatients as listarPacientes } from '../../pacientes/data/pacientes.repository';
-import type { Paciente } from '../../pacientes/type/paciente.interface';
-import { plantillasAnalisis } from '../data/plantillasAnalisis.data';
-import { guardarAnalisisClinico } from '../data/analisisFormulario.repository';
+import { listPatients as listarPacientes } from '../../pacientes/services/pacientes.repository';
+import type { Paciente } from '../../pacientes/types/paciente.type';
+import type { FormulariosAnalisisComponentsProps } from '../types/formulariosAnalisisComponentsProps.type';
+import { plantillasAnalisis } from '../services/plantillasAnalisis.data';
+import { guardarAnalisisClinico } from '../services/analisisFormulario.repository';
 import { DiccionarioFormulariosComponents } from './diccionarioFormularios.components';
 import '../../../styles/formularios/formularios.css';
-
-type FormulariosAnalisisComponentsProps = {
-  doctorId: string;
-};
 
 export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisComponentsProps) => {
   const [parametrosUrl] = useSearchParams();
   const navegar = useNavigate();
   const pacienteIdInicial = parametrosUrl.get('patientId');
+  const plantillaIdInicial = parametrosUrl.get('templateId');
   const [pacientes, actualizarPacientes] = useState<Paciente[]>([]);
   const [pacienteSeleccionado, actualizarPacienteSeleccionado] = useState<string | null>(null);
   const [plantillaSeleccionada, actualizarPlantillaSeleccionada] = useState<string | null>(null);
@@ -45,6 +43,13 @@ export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisC
             ? pacienteIdInicial
             : null,
         );
+        actualizarPlantillaSeleccionada(
+          plantillaIdInicial && plantillasAnalisis.some(
+            (plantilla) => plantilla.id === plantillaIdInicial && plantilla.disponible,
+          )
+            ? plantillaIdInicial
+            : null,
+        );
       })
       .catch((error: unknown) => {
         console.error('No se pudieron cargar los pacientes:', error);
@@ -57,7 +62,7 @@ export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisC
     return () => {
       vigente = false;
     };
-  }, [doctorId, pacienteIdInicial]);
+  }, [doctorId, pacienteIdInicial, plantillaIdInicial]);
 
   const iniciarFormulario = () => {
     const plantilla = plantillasAnalisis.find((opcion) => opcion.id === plantillaSeleccionada);
@@ -139,9 +144,26 @@ export const FormulariosAnalisisComponents = ({ doctorId }: FormulariosAnalisisC
     <section className="analysis-form-page" aria-labelledby="analysis-form-title">
       <BackButtonComponent fallbackTo="/" />
       <Stack gap="lg">
-        <div>
-          <Text c="dimmed" size="sm">BIO-TEC / Análisis clínicos</Text>
-          <Title id="analysis-form-title" order={1}>Nuevo análisis clínico</Title>
+        <div className="analysis-form-page__heading">
+          <div>
+            <Text c="dimmed" size="sm">BIO-TEC / Análisis clínicos</Text>
+            <Title id="analysis-form-title" order={1}>Nuevo análisis clínico</Title>
+          </div>
+          {!formularioIniciado && (
+            <Button
+              type="button"
+              variant="default"
+              onClick={() => navegar('/pacientes/nuevo', {
+                state: {
+                  origen: 'analisis',
+                  pacienteId: pacienteSeleccionado ?? undefined,
+                  plantillaId: plantillaSeleccionada ?? undefined,
+                },
+              })}
+            >
+              Nuevo paciente
+            </Button>
+          )}
         </div>
 
         {errorCarga && <Alert color="red">{errorCarga}</Alert>}

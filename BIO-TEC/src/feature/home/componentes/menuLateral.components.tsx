@@ -1,13 +1,7 @@
 import { ActionIcon, Text } from '@mantine/core';
 import { ClipboardList, Clock3, House, Pin, Settings, UserRound, Users, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
-
-type MenuLateralComponentProps = {
-  isPinned: boolean;
-  isOpen: boolean;
-  onTogglePinned: () => void;
-  onClose: () => void;
-};
+import type { MenuLateralComponentProps } from '../types/menuLateralComponentProps.type';
 
 const navigationItems = [
   { label: 'Inicio', to: '/', icon: House, end: true },

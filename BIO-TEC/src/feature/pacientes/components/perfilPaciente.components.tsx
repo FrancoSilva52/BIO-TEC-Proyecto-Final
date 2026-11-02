@@ -4,10 +4,11 @@ import { Badge, Paper, Text } from '@mantine/core';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BackButtonComponent } from '../../../components/navigation/backButton.component';
 import { AnalisisPacienteComponent } from '../../historial/analisis';
-import { getPatientById } from '../data/pacientes.repository';
-import type { Paciente } from '../type/paciente.interface';
+import { getPatientById } from '../services/pacientes.repository';
+import type { Paciente } from '../types/paciente.type';
+import type { PerfilPacienteComponentsProps } from '../types/perfilPacienteComponentsProps.type';
 
-const calculateAge = (birthDate: string) => {
+const calcularEdad = (birthDate: string) => {
   const date = new Date(`${birthDate}T00:00:00`);
   if (Number.isNaN(date.getTime())) return null;
 
@@ -19,10 +20,6 @@ const calculateAge = (birthDate: string) => {
 
   if (!birthdayHasPassed) age -= 1;
   return age >= 0 ? age : null;
-};
-
-type PerfilPacienteComponentsProps = {
-  doctorId: string;
 };
 
 export const PerfilPacienteComponents = ({ doctorId }: PerfilPacienteComponentsProps) => {
@@ -84,7 +81,6 @@ export const PerfilPacienteComponents = ({ doctorId }: PerfilPacienteComponentsP
               </h1>
               <p className="patients-page__description">Ficha técnica e historial de análisis</p>
             </div>
-            <Text className="patients-page__demo-note">Datos de demostración</Text>
           </div>
 
           <div className="patient-profile__layout">
@@ -94,7 +90,7 @@ export const PerfilPacienteComponents = ({ doctorId }: PerfilPacienteComponentsP
                 <dl className="patient-profile__fields">
                   <div>
                     <dt>Edad</dt>
-                    <dd>{calculateAge(patient.fechaNacimiento) ?? 'No disponible'}</dd>
+                    <dd>{calcularEdad(patient.fechaNacimiento) ?? 'No disponible'}</dd>
                   </div>
                   <div>
                     <dt>DNI</dt>

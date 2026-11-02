@@ -1,19 +1,4 @@
-export type ParametroAnalisis = {
-  id: string;
-  nombre: string;
-  seccion: string;
-  unidad: string;
-  referencia: string;
-  tipo: 'numero' | 'texto';
-};
-
-export type PlantillaAnalisis = {
-  id: string;
-  nombre: string;
-  version: string;
-  disponible: boolean;
-  parametros: ParametroAnalisis[];
-};
+import type { PlantillaAnalisis } from '../types/plantillaAnalisis.type';
 
 const referenciaNoIndicada = 'No indicada en el informe';
 

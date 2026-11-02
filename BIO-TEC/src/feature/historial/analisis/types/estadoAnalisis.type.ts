@@ -1,0 +1,1 @@
+export type EstadoAnalisis = 'Disponible' | 'En proceso';

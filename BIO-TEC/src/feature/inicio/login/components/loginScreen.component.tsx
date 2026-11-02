@@ -2,11 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { Alert, Button, Checkbox, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import '../../../../styles/login/login.css';
-import { authenticateUser, type AuthenticatedUser } from '../services/auth.service';
-
-type LoginScreenComponentProps = {
-  onLogin: (user: AuthenticatedUser) => void;
-};
+import { authenticateUser } from '../services/auth.service';
+import type { LoginScreenComponentProps } from '../types/loginScreenComponentProps.type';
 
 export const LoginScreenComponent = ({ onLogin }: LoginScreenComponentProps) => {
   const [password, setPassword] = useState('');

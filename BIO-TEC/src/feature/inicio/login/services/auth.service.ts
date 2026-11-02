@@ -1,22 +1,6 @@
 import { getDatabase } from '../../../../lib/database';
-
-export interface AuthenticatedUser {
-  id: string;
-  username: string;
-  fullName: string;
-  profilePhotoDataUrl: string;
-}
-
-type UserCredentialRow = {
-  id: string;
-  username: string;
-  full_name: string;
-  profile_photo_data_url: string;
-  password_hash: string;
-  password_salt: string;
-  password_iterations: number;
-  is_active: number;
-};
+import type { AuthenticatedUser } from '../types/authenticatedUser.type';
+import type { UserCredentialRow } from '../types/userCredentialRow.type';
 
 const hexToBytes = (value: string) => {
   const bytes = new Uint8Array(value.length / 2);
