@@ -33,6 +33,12 @@ pub fn run() {
             sql: include_str!("../migrations/004_add_patient_sex_and_medical_institution.sql").trim_end(),
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 5,
+            description: "remove_seeded_demo_analyses",
+            sql: include_str!("../migrations/005_remove_seeded_demo_analyses.sql").trim_end(),
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()

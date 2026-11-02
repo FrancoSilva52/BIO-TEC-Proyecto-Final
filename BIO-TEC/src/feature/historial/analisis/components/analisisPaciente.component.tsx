@@ -201,9 +201,6 @@ export const AnalisisPacienteComponent = ({
                   ),
                 }}
               />
-              <Alert className="patient-analysis__demo-warning" color="blue" variant="light">
-                Valores de muestra sin validez clínica. No utilizar para diagnóstico ni tratamiento.
-              </Alert>
               {selectedAnalysis.resultados.length === 0 && (
                 <Text className="patient-analysis__processing" c="dimmed">
                   Este análisis todavía está en proceso y no tiene resultados disponibles.

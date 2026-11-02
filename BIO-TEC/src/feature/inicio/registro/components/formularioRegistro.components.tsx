@@ -3,7 +3,12 @@ import { useState, type FormEvent } from 'react';
 import { Alert, Avatar, Button, FileInput, Group, PasswordInput, Stack, Text, TextInput, Title } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import '../../../../styles/inicio/registro.css';
-import { DatosMedicoDuplicadosError, registrarMedico } from '../services/registro.service';
+import {
+  actualizarPerfilMedico,
+  DatosMedicoDuplicadosError,
+  registrarMedico,
+} from '../services/registro.service';
+import type { FormularioRegistroComponentsProps } from '../types/formularioRegistroComponentsProps.type';
 
 const PASSWORD_POLICY = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
 const MAX_PHOTO_FILE_SIZE = 5 * 1024 * 1024;
@@ -36,17 +41,25 @@ const compressProfilePhoto = async (file: File) => {
   return canvas.toDataURL('image/jpeg', 0.78);
 };
 
-export const FormularioRegistroComponents = () => {
-  const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState('');
-  const [dni, setDni] = useState('');
-  const [area, setArea] = useState('');
-  const [institucion, setInstitucion] = useState('');
-  const [telefono, setTelefono] = useState('');
-  const [email, setEmail] = useState('');
+export const FormularioRegistroComponents = ({
+  modo = 'registro',
+  medicoId,
+  perfilInicial,
+  alActualizarPerfil,
+  alCancelar,
+}: FormularioRegistroComponentsProps) => {
+  const [nombre, setNombre] = useState(perfilInicial?.nombre ?? '');
+  const [apellido, setApellido] = useState(perfilInicial?.apellido ?? '');
+  const [dni, setDni] = useState(perfilInicial?.dni ?? '');
+  const [area, setArea] = useState(perfilInicial?.area ?? '');
+  const [institucion, setInstitucion] = useState(perfilInicial?.institucion ?? '');
+  const [telefono, setTelefono] = useState(perfilInicial?.telefono ?? '');
+  const [email, setEmail] = useState(perfilInicial?.email ?? '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [profilePhotoDataUrl, setProfilePhotoDataUrl] = useState('');
+  const [profilePhotoDataUrl, setProfilePhotoDataUrl] = useState(
+    perfilInicial?.profilePhotoDataUrl ?? '',
+  );
   const [isPhotoProcessing, setIsPhotoProcessing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
@@ -73,28 +86,51 @@ export const FormularioRegistroComponents = () => {
     event.preventDefault();
     setFormError('');
 
-    if (!PASSWORD_POLICY.test(password)) {
-      setFormError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.');
-      return;
-    }
-    if (password !== confirmPassword) {
-      setFormError('Las contraseñas no coinciden.');
-      return;
+    if (modo === 'registro' || password || confirmPassword) {
+      if (!PASSWORD_POLICY.test(password)) {
+        setFormError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un número.');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setFormError('Las contraseñas no coinciden.');
+        return;
+      }
     }
 
     setIsSubmitting(true);
     try {
-      await registrarMedico({
-        nombre,
-        apellido,
-        dni,
-        area,
-        institucion,
-        telefono,
-        email,
-        profilePhotoDataUrl,
-        password,
-      });
+      if (modo === 'edicion' && !medicoId) {
+        setFormError('No se pudo identificar el perfil médico que se va a editar.');
+        return;
+      }
+
+      if (modo === 'edicion') {
+        const usuarioActualizado = await actualizarPerfilMedico({
+          id: medicoId!,
+          nombre,
+          apellido,
+          dni,
+          area,
+          institucion,
+          telefono,
+          email,
+          profilePhotoDataUrl,
+          password: password || undefined,
+        });
+        alActualizarPerfil?.(usuarioActualizado);
+      } else {
+        await registrarMedico({
+          nombre,
+          apellido,
+          dni,
+          area,
+          institucion,
+          telefono,
+          email,
+          profilePhotoDataUrl,
+          password,
+        });
+      }
       setIsRegistered(true);
     } catch (error) {
       if (error instanceof DatosMedicoDuplicadosError) {
@@ -121,16 +157,30 @@ export const FormularioRegistroComponents = () => {
 
         {isRegistered ? (
           <div className="registration-success">
-            <Title id="registration-title" order={2}>Registro completado</Title>
-            <Text c="dimmed">Tu usuario médico se guardó en esta computadora.</Text>
-            <Button component={Link} to="/login" fullWidth mt="md">
-              Ir a iniciar sesión
-            </Button>
+            <Title id="registration-title" order={2}>
+              {modo === 'edicion' ? 'Perfil actualizado' : 'Registro completado'}
+            </Title>
+            <Text c="dimmed">
+              {modo === 'edicion'
+                ? 'Los datos de tu perfil se actualizaron correctamente.'
+                : 'Tu usuario médico se guardó en esta computadora.'}
+            </Text>
+            {modo === 'edicion' ? (
+              <Button fullWidth mt="md" onClick={alCancelar}>
+                Volver a Configuración
+              </Button>
+            ) : (
+              <Button component={Link} to="/login" fullWidth mt="md">
+                Ir a iniciar sesión
+              </Button>
+            )}
           </div>
         ) : (
           <>
             <div className="registration-heading">
-              <Title id="registration-title" order={2}>Crear usuario médico</Title>
+              <Title id="registration-title" order={2}>
+                {modo === 'edicion' ? 'Editar perfil médico' : 'Crear usuario médico'}
+              </Title>
               <Text size="sm" c="dimmed">Los campos marcados con * son obligatorios.</Text>
             </div>
 
@@ -164,29 +214,37 @@ export const FormularioRegistroComponents = () => {
                 </div>
 
                 <PasswordInput
-                  label="Contraseña "
+                  label={modo === 'edicion' ? 'Nueva contraseña (opcional)' : 'Contraseña '}
                   value={password}
                   onChange={(event) => setPassword(event.currentTarget.value)}
-                  required
+                  required={modo === 'registro'}
                   autoComplete="new-password"
-                  description="Mínimo 8 caracteres, una mayúscula y un número."
+                  description={modo === 'edicion'
+                    ? 'Dejala vacía para conservar la contraseña actual.'
+                    : 'Mínimo 8 caracteres, una mayúscula y un número.'}
                 />
                 <PasswordInput
-                  label="Confirmar contraseña "
+                  label={modo === 'edicion' ? 'Confirmar nueva contraseña' : 'Confirmar contraseña '}
                   value={confirmPassword}
                   onChange={(event) => setConfirmPassword(event.currentTarget.value)}
-                  required
+                  required={modo === 'registro' || Boolean(password)}
                   autoComplete="new-password"
                 />
 
                 {formError && <Alert color="red" variant="light" role="alert">{formError}</Alert>}
 
                 <Button type="submit" fullWidth mt="xs" loading={isSubmitting || isPhotoProcessing}>
-                  Crear usuario
+                  {modo === 'edicion' ? 'Guardar cambios' : 'Crear usuario'}
                 </Button>
-                <Button component={Link} to="/login" variant="subtle" fullWidth>
-                  Volver a iniciar sesión
-                </Button>
+                {modo === 'edicion' ? (
+                  <Button type="button" variant="subtle" fullWidth onClick={alCancelar}>
+                    Cancelar
+                  </Button>
+                ) : (
+                  <Button component={Link} to="/login" variant="subtle" fullWidth>
+                    Volver a iniciar sesión
+                  </Button>
+                )}
               </Stack>
             </form>
           </>

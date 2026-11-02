@@ -228,9 +228,6 @@ export const PacienteHistorialComponents = ({
                   ),
                 }}
               />
-              <Alert className="analysis-history__demo-warning" color="blue" variant="light">
-                Valores de muestra sin validez clínica. No utilizar para diagnóstico ni tratamiento.
-              </Alert>
             </div>
             <div className="analysis-history__modal-actions">
               {selectedAnalysis.patientDoctorId === doctorId && (

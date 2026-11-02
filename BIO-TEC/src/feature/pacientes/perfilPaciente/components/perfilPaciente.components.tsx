@@ -161,7 +161,7 @@ export const PerfilPacienteComponents = ({ doctorId }: PerfilPacienteComponentsP
           <p className="patients-page__eyebrow">BIO-TEC / Pacientes</p>
           <h1 id="patient-profile-title">Paciente no encontrado</h1>
           <p className="patients-page__description">
-            El registro solicitado no está disponible en los datos de demostración.
+            El paciente no existe o no está disponible para este usuario.
           </p>
         </div>
       )}
